@@ -1,0 +1,857 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		10DFF1C9EC79DA2EAB0061E2 /* Pods_GraphicMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928D153B91CADCA4A1A881D3 /* Pods_GraphicMap.framework */; };
+		16043A3DFDC6FCD178CCF52B /* Pods_GraphicMapTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67EB0DB308BE1911B3D48E10 /* Pods_GraphicMapTests.framework */; };
+		96AD2A68D777C02887537180 /* Pods_GraphicMap_GraphicMapUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F97E29E9018F285C2795ADDE /* Pods_GraphicMap_GraphicMapUITests.framework */; };
+		B3C1ABF326845A82007C1941 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1ABF226845A82007C1941 /* AppDelegate.swift */; };
+		B3C1ABF526845A82007C1941 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1ABF426845A82007C1941 /* SceneDelegate.swift */; };
+		B3C1ABF726845A82007C1941 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1ABF626845A82007C1941 /* ViewController.swift */; };
+		B3C1ABFA26845A82007C1941 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3C1ABF826845A82007C1941 /* Main.storyboard */; };
+		B3C1ABFD26845A82007C1941 /* GraphicMap.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B3C1ABFB26845A82007C1941 /* GraphicMap.xcdatamodeld */; };
+		B3C1ABFF26845A83007C1941 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3C1ABFE26845A83007C1941 /* Assets.xcassets */; };
+		B3C1AC0226845A83007C1941 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3C1AC0026845A83007C1941 /* LaunchScreen.storyboard */; };
+		B3C1AC0D26845A83007C1941 /* GraphicMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC0C26845A83007C1941 /* GraphicMapTests.swift */; };
+		B3C1AC1826845A83007C1941 /* GraphicMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC1726845A83007C1941 /* GraphicMapUITests.swift */; };
+		B3C1AC3926846029007C1941 /* GraphicBeacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC2C26846029007C1941 /* GraphicBeacon.swift */; };
+		B3C1AC3A26846029007C1941 /* GraphicSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC2D26846029007C1941 /* GraphicSensor.swift */; };
+		B3C1AC3B26846029007C1941 /* GraphicLabelZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC2E26846029007C1941 /* GraphicLabelZone.swift */; };
+		B3C1AC3C26846029007C1941 /* GraphicSquareZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC2F26846029007C1941 /* GraphicSquareZone.swift */; };
+		B3C1AC3D26846029007C1941 /* GraphicCircleControlZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3026846029007C1941 /* GraphicCircleControlZone.swift */; };
+		B3C1AC3E26846029007C1941 /* GraphicMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3126846029007C1941 /* GraphicMap.swift */; };
+		B3C1AC3F26846029007C1941 /* GraphicLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3226846029007C1941 /* GraphicLight.swift */; };
+		B3C1AC4026846029007C1941 /* GraphicEditorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3326846029007C1941 /* GraphicEditorUtils.swift */; };
+		B3C1AC4126846029007C1941 /* GraphicCircleZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3426846029007C1941 /* GraphicCircleZone.swift */; };
+		B3C1AC4226846029007C1941 /* GraphicDeviceEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3526846029007C1941 /* GraphicDeviceEditorView.swift */; };
+		B3C1AC4326846029007C1941 /* GraphicSquareControlZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3626846029007C1941 /* GraphicSquareControlZone.swift */; };
+		B3C1AC4426846029007C1941 /* GraphicGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3726846029007C1941 /* GraphicGateway.swift */; };
+		B3C1AC4526846029007C1941 /* GraphicZoneEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC3826846029007C1941 /* GraphicZoneEditorView.swift */; };
+		B3C1AC4F26846118007C1941 /* GraphicBaseEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC4A26846118007C1941 /* GraphicBaseEditorView.swift */; };
+		B3C1AC5026846118007C1941 /* GraphicBaseDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC4B26846118007C1941 /* GraphicBaseDevice.swift */; };
+		B3C1AC5126846118007C1941 /* GraphicBaseAbstract.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC4C26846118007C1941 /* GraphicBaseAbstract.swift */; };
+		B3C1AC5226846118007C1941 /* GraphicBaseZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC4D26846118007C1941 /* GraphicBaseZone.swift */; };
+		B3C1AC5326846118007C1941 /* GraphicBaseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC4E26846118007C1941 /* GraphicBaseMap.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B3C1AC0926845A83007C1941 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B3C1ABE726845A82007C1941 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B3C1ABEE26845A82007C1941;
+			remoteInfo = GraphicMap;
+		};
+		B3C1AC1426845A83007C1941 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B3C1ABE726845A82007C1941 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B3C1ABEE26845A82007C1941;
+			remoteInfo = GraphicMap;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		56C490E568919DCA2EDDC233 /* Pods-GraphicMap-GraphicMapUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraphicMap-GraphicMapUITests.debug.xcconfig"; path = "Target Support Files/Pods-GraphicMap-GraphicMapUITests/Pods-GraphicMap-GraphicMapUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		67EB0DB308BE1911B3D48E10 /* Pods_GraphicMapTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GraphicMapTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8468949F8EBAA6ABE5782B47 /* Pods-GraphicMapTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraphicMapTests.debug.xcconfig"; path = "Target Support Files/Pods-GraphicMapTests/Pods-GraphicMapTests.debug.xcconfig"; sourceTree = "<group>"; };
+		8BCDA07C3E0E7330862567FA /* Pods-GraphicMapTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraphicMapTests.release.xcconfig"; path = "Target Support Files/Pods-GraphicMapTests/Pods-GraphicMapTests.release.xcconfig"; sourceTree = "<group>"; };
+		928D153B91CADCA4A1A881D3 /* Pods_GraphicMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GraphicMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A200F8F88701E9023C80AF16 /* Pods-GraphicMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraphicMap.debug.xcconfig"; path = "Target Support Files/Pods-GraphicMap/Pods-GraphicMap.debug.xcconfig"; sourceTree = "<group>"; };
+		ACCB4E2A00CEBBD78ABDE51B /* Pods-GraphicMap-GraphicMapUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraphicMap-GraphicMapUITests.release.xcconfig"; path = "Target Support Files/Pods-GraphicMap-GraphicMapUITests/Pods-GraphicMap-GraphicMapUITests.release.xcconfig"; sourceTree = "<group>"; };
+		B3C1ABEF26845A82007C1941 /* GraphicMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GraphicMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3C1ABF226845A82007C1941 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B3C1ABF426845A82007C1941 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		B3C1ABF626845A82007C1941 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B3C1ABF926845A82007C1941 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B3C1ABFC26845A82007C1941 /* GraphicMap.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GraphicMap.xcdatamodel; sourceTree = "<group>"; };
+		B3C1ABFE26845A83007C1941 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B3C1AC0126845A83007C1941 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B3C1AC0326845A83007C1941 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B3C1AC0826845A83007C1941 /* GraphicMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphicMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3C1AC0C26845A83007C1941 /* GraphicMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicMapTests.swift; sourceTree = "<group>"; };
+		B3C1AC0E26845A83007C1941 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B3C1AC1326845A83007C1941 /* GraphicMapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphicMapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3C1AC1726845A83007C1941 /* GraphicMapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicMapUITests.swift; sourceTree = "<group>"; };
+		B3C1AC1926845A83007C1941 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B3C1AC2C26846029007C1941 /* GraphicBeacon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBeacon.swift; sourceTree = "<group>"; };
+		B3C1AC2D26846029007C1941 /* GraphicSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicSensor.swift; sourceTree = "<group>"; };
+		B3C1AC2E26846029007C1941 /* GraphicLabelZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicLabelZone.swift; sourceTree = "<group>"; };
+		B3C1AC2F26846029007C1941 /* GraphicSquareZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicSquareZone.swift; sourceTree = "<group>"; };
+		B3C1AC3026846029007C1941 /* GraphicCircleControlZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicCircleControlZone.swift; sourceTree = "<group>"; };
+		B3C1AC3126846029007C1941 /* GraphicMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicMap.swift; sourceTree = "<group>"; };
+		B3C1AC3226846029007C1941 /* GraphicLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicLight.swift; sourceTree = "<group>"; };
+		B3C1AC3326846029007C1941 /* GraphicEditorUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicEditorUtils.swift; sourceTree = "<group>"; };
+		B3C1AC3426846029007C1941 /* GraphicCircleZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicCircleZone.swift; sourceTree = "<group>"; };
+		B3C1AC3526846029007C1941 /* GraphicDeviceEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicDeviceEditorView.swift; sourceTree = "<group>"; };
+		B3C1AC3626846029007C1941 /* GraphicSquareControlZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicSquareControlZone.swift; sourceTree = "<group>"; };
+		B3C1AC3726846029007C1941 /* GraphicGateway.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicGateway.swift; sourceTree = "<group>"; };
+		B3C1AC3826846029007C1941 /* GraphicZoneEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicZoneEditorView.swift; sourceTree = "<group>"; };
+		B3C1AC4A26846118007C1941 /* GraphicBaseEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBaseEditorView.swift; sourceTree = "<group>"; };
+		B3C1AC4B26846118007C1941 /* GraphicBaseDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBaseDevice.swift; sourceTree = "<group>"; };
+		B3C1AC4C26846118007C1941 /* GraphicBaseAbstract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBaseAbstract.swift; sourceTree = "<group>"; };
+		B3C1AC4D26846118007C1941 /* GraphicBaseZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBaseZone.swift; sourceTree = "<group>"; };
+		B3C1AC4E26846118007C1941 /* GraphicBaseMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBaseMap.swift; sourceTree = "<group>"; };
+		DC024568FA5DB96ECCC268BA /* Pods-GraphicMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraphicMap.release.xcconfig"; path = "Target Support Files/Pods-GraphicMap/Pods-GraphicMap.release.xcconfig"; sourceTree = "<group>"; };
+		F97E29E9018F285C2795ADDE /* Pods_GraphicMap_GraphicMapUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GraphicMap_GraphicMapUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B3C1ABEC26845A82007C1941 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10DFF1C9EC79DA2EAB0061E2 /* Pods_GraphicMap.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3C1AC0526845A83007C1941 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16043A3DFDC6FCD178CCF52B /* Pods_GraphicMapTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3C1AC1026845A83007C1941 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96AD2A68D777C02887537180 /* Pods_GraphicMap_GraphicMapUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		35D86B22B7779263BAC7A5ED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				928D153B91CADCA4A1A881D3 /* Pods_GraphicMap.framework */,
+				F97E29E9018F285C2795ADDE /* Pods_GraphicMap_GraphicMapUITests.framework */,
+				67EB0DB308BE1911B3D48E10 /* Pods_GraphicMapTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		51BE5180983B98B5CE3C5EBA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A200F8F88701E9023C80AF16 /* Pods-GraphicMap.debug.xcconfig */,
+				DC024568FA5DB96ECCC268BA /* Pods-GraphicMap.release.xcconfig */,
+				56C490E568919DCA2EDDC233 /* Pods-GraphicMap-GraphicMapUITests.debug.xcconfig */,
+				ACCB4E2A00CEBBD78ABDE51B /* Pods-GraphicMap-GraphicMapUITests.release.xcconfig */,
+				8468949F8EBAA6ABE5782B47 /* Pods-GraphicMapTests.debug.xcconfig */,
+				8BCDA07C3E0E7330862567FA /* Pods-GraphicMapTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B3C1ABE626845A81007C1941 = {
+			isa = PBXGroup;
+			children = (
+				B3C1ABF126845A82007C1941 /* GraphicMap */,
+				B3C1AC0B26845A83007C1941 /* GraphicMapTests */,
+				B3C1AC1626845A83007C1941 /* GraphicMapUITests */,
+				B3C1ABF026845A82007C1941 /* Products */,
+				51BE5180983B98B5CE3C5EBA /* Pods */,
+				35D86B22B7779263BAC7A5ED /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B3C1ABF026845A82007C1941 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B3C1ABEF26845A82007C1941 /* GraphicMap.app */,
+				B3C1AC0826845A83007C1941 /* GraphicMapTests.xctest */,
+				B3C1AC1326845A83007C1941 /* GraphicMapUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B3C1ABF126845A82007C1941 /* GraphicMap */ = {
+			isa = PBXGroup;
+			children = (
+				B3C1ABF226845A82007C1941 /* AppDelegate.swift */,
+				B3C1ABF426845A82007C1941 /* SceneDelegate.swift */,
+				B3C1ABF626845A82007C1941 /* ViewController.swift */,
+				B3C1ABF826845A82007C1941 /* Main.storyboard */,
+				B3C1ABFE26845A83007C1941 /* Assets.xcassets */,
+				B3C1AC0026845A83007C1941 /* LaunchScreen.storyboard */,
+				B3C1AC0326845A83007C1941 /* Info.plist */,
+				B3C1ABFB26845A82007C1941 /* GraphicMap.xcdatamodeld */,
+				B3C1AC2B26846002007C1941 /* Utils */,
+			);
+			path = GraphicMap;
+			sourceTree = "<group>";
+		};
+		B3C1AC0B26845A83007C1941 /* GraphicMapTests */ = {
+			isa = PBXGroup;
+			children = (
+				B3C1AC0C26845A83007C1941 /* GraphicMapTests.swift */,
+				B3C1AC0E26845A83007C1941 /* Info.plist */,
+			);
+			path = GraphicMapTests;
+			sourceTree = "<group>";
+		};
+		B3C1AC1626845A83007C1941 /* GraphicMapUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B3C1AC1726845A83007C1941 /* GraphicMapUITests.swift */,
+				B3C1AC1926845A83007C1941 /* Info.plist */,
+			);
+			path = GraphicMapUITests;
+			sourceTree = "<group>";
+		};
+		B3C1AC2B26846002007C1941 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B3C1AC4926846118007C1941 /* Abstract */,
+				B3C1AC2C26846029007C1941 /* GraphicBeacon.swift */,
+				B3C1AC3026846029007C1941 /* GraphicCircleControlZone.swift */,
+				B3C1AC3426846029007C1941 /* GraphicCircleZone.swift */,
+				B3C1AC3526846029007C1941 /* GraphicDeviceEditorView.swift */,
+				B3C1AC3326846029007C1941 /* GraphicEditorUtils.swift */,
+				B3C1AC3726846029007C1941 /* GraphicGateway.swift */,
+				B3C1AC2E26846029007C1941 /* GraphicLabelZone.swift */,
+				B3C1AC3226846029007C1941 /* GraphicLight.swift */,
+				B3C1AC3126846029007C1941 /* GraphicMap.swift */,
+				B3C1AC2D26846029007C1941 /* GraphicSensor.swift */,
+				B3C1AC3626846029007C1941 /* GraphicSquareControlZone.swift */,
+				B3C1AC2F26846029007C1941 /* GraphicSquareZone.swift */,
+				B3C1AC3826846029007C1941 /* GraphicZoneEditorView.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		B3C1AC4926846118007C1941 /* Abstract */ = {
+			isa = PBXGroup;
+			children = (
+				B3C1AC4A26846118007C1941 /* GraphicBaseEditorView.swift */,
+				B3C1AC4B26846118007C1941 /* GraphicBaseDevice.swift */,
+				B3C1AC4C26846118007C1941 /* GraphicBaseAbstract.swift */,
+				B3C1AC4D26846118007C1941 /* GraphicBaseZone.swift */,
+				B3C1AC4E26846118007C1941 /* GraphicBaseMap.swift */,
+			);
+			path = Abstract;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B3C1ABEE26845A82007C1941 /* GraphicMap */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B3C1AC1C26845A83007C1941 /* Build configuration list for PBXNativeTarget "GraphicMap" */;
+			buildPhases = (
+				F753F8B1FC98642B04E885A7 /* [CP] Check Pods Manifest.lock */,
+				B3C1ABEB26845A82007C1941 /* Sources */,
+				B3C1ABEC26845A82007C1941 /* Frameworks */,
+				B3C1ABED26845A82007C1941 /* Resources */,
+				0B530B19FEF9D0A987218BC4 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GraphicMap;
+			productName = GraphicMap;
+			productReference = B3C1ABEF26845A82007C1941 /* GraphicMap.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B3C1AC0726845A83007C1941 /* GraphicMapTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B3C1AC1F26845A83007C1941 /* Build configuration list for PBXNativeTarget "GraphicMapTests" */;
+			buildPhases = (
+				43A9FFC65C954EC27EE4C88E /* [CP] Check Pods Manifest.lock */,
+				B3C1AC0426845A83007C1941 /* Sources */,
+				B3C1AC0526845A83007C1941 /* Frameworks */,
+				B3C1AC0626845A83007C1941 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B3C1AC0A26845A83007C1941 /* PBXTargetDependency */,
+			);
+			name = GraphicMapTests;
+			productName = GraphicMapTests;
+			productReference = B3C1AC0826845A83007C1941 /* GraphicMapTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B3C1AC1226845A83007C1941 /* GraphicMapUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B3C1AC2226845A83007C1941 /* Build configuration list for PBXNativeTarget "GraphicMapUITests" */;
+			buildPhases = (
+				04F61247FC57F81E2243B19C /* [CP] Check Pods Manifest.lock */,
+				B3C1AC0F26845A83007C1941 /* Sources */,
+				B3C1AC1026845A83007C1941 /* Frameworks */,
+				B3C1AC1126845A83007C1941 /* Resources */,
+				E8B61AC1A31133C4475C37F1 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B3C1AC1526845A83007C1941 /* PBXTargetDependency */,
+			);
+			name = GraphicMapUITests;
+			productName = GraphicMapUITests;
+			productReference = B3C1AC1326845A83007C1941 /* GraphicMapUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B3C1ABE726845A82007C1941 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					B3C1ABEE26845A82007C1941 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					B3C1AC0726845A83007C1941 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = B3C1ABEE26845A82007C1941;
+					};
+					B3C1AC1226845A83007C1941 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = B3C1ABEE26845A82007C1941;
+					};
+				};
+			};
+			buildConfigurationList = B3C1ABEA26845A82007C1941 /* Build configuration list for PBXProject "GraphicMap" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B3C1ABE626845A81007C1941;
+			productRefGroup = B3C1ABF026845A82007C1941 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B3C1ABEE26845A82007C1941 /* GraphicMap */,
+				B3C1AC0726845A83007C1941 /* GraphicMapTests */,
+				B3C1AC1226845A83007C1941 /* GraphicMapUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B3C1ABED26845A82007C1941 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3C1AC0226845A83007C1941 /* LaunchScreen.storyboard in Resources */,
+				B3C1ABFF26845A83007C1941 /* Assets.xcassets in Resources */,
+				B3C1ABFA26845A82007C1941 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3C1AC0626845A83007C1941 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3C1AC1126845A83007C1941 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		04F61247FC57F81E2243B19C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GraphicMap-GraphicMapUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0B530B19FEF9D0A987218BC4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GraphicMap/Pods-GraphicMap-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GraphicMap/Pods-GraphicMap-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GraphicMap/Pods-GraphicMap-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		43A9FFC65C954EC27EE4C88E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GraphicMapTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8B61AC1A31133C4475C37F1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GraphicMap-GraphicMapUITests/Pods-GraphicMap-GraphicMapUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GraphicMap-GraphicMapUITests/Pods-GraphicMap-GraphicMapUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GraphicMap-GraphicMapUITests/Pods-GraphicMap-GraphicMapUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F753F8B1FC98642B04E885A7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GraphicMap-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B3C1ABEB26845A82007C1941 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3C1AC3B26846029007C1941 /* GraphicLabelZone.swift in Sources */,
+				B3C1AC3F26846029007C1941 /* GraphicLight.swift in Sources */,
+				B3C1ABF726845A82007C1941 /* ViewController.swift in Sources */,
+				B3C1AC4426846029007C1941 /* GraphicGateway.swift in Sources */,
+				B3C1ABF326845A82007C1941 /* AppDelegate.swift in Sources */,
+				B3C1AC3E26846029007C1941 /* GraphicMap.swift in Sources */,
+				B3C1AC5326846118007C1941 /* GraphicBaseMap.swift in Sources */,
+				B3C1AC4026846029007C1941 /* GraphicEditorUtils.swift in Sources */,
+				B3C1AC3926846029007C1941 /* GraphicBeacon.swift in Sources */,
+				B3C1AC4126846029007C1941 /* GraphicCircleZone.swift in Sources */,
+				B3C1AC4F26846118007C1941 /* GraphicBaseEditorView.swift in Sources */,
+				B3C1AC5026846118007C1941 /* GraphicBaseDevice.swift in Sources */,
+				B3C1AC4526846029007C1941 /* GraphicZoneEditorView.swift in Sources */,
+				B3C1AC4226846029007C1941 /* GraphicDeviceEditorView.swift in Sources */,
+				B3C1AC4326846029007C1941 /* GraphicSquareControlZone.swift in Sources */,
+				B3C1ABF526845A82007C1941 /* SceneDelegate.swift in Sources */,
+				B3C1AC5126846118007C1941 /* GraphicBaseAbstract.swift in Sources */,
+				B3C1AC3A26846029007C1941 /* GraphicSensor.swift in Sources */,
+				B3C1AC5226846118007C1941 /* GraphicBaseZone.swift in Sources */,
+				B3C1AC3D26846029007C1941 /* GraphicCircleControlZone.swift in Sources */,
+				B3C1ABFD26845A82007C1941 /* GraphicMap.xcdatamodeld in Sources */,
+				B3C1AC3C26846029007C1941 /* GraphicSquareZone.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3C1AC0426845A83007C1941 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3C1AC0D26845A83007C1941 /* GraphicMapTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3C1AC0F26845A83007C1941 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3C1AC1826845A83007C1941 /* GraphicMapUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B3C1AC0A26845A83007C1941 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B3C1ABEE26845A82007C1941 /* GraphicMap */;
+			targetProxy = B3C1AC0926845A83007C1941 /* PBXContainerItemProxy */;
+		};
+		B3C1AC1526845A83007C1941 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B3C1ABEE26845A82007C1941 /* GraphicMap */;
+			targetProxy = B3C1AC1426845A83007C1941 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B3C1ABF826845A82007C1941 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B3C1ABF926845A82007C1941 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B3C1AC0026845A83007C1941 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B3C1AC0126845A83007C1941 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B3C1AC1A26845A83007C1941 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B3C1AC1B26845A83007C1941 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B3C1AC1D26845A83007C1941 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A200F8F88701E9023C80AF16 /* Pods-GraphicMap.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JNG48N5A69;
+				INFOPLIST_FILE = GraphicMap/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.leo.GraphicMap;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B3C1AC1E26845A83007C1941 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC024568FA5DB96ECCC268BA /* Pods-GraphicMap.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JNG48N5A69;
+				INFOPLIST_FILE = GraphicMap/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.leo.GraphicMap;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B3C1AC2026845A83007C1941 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8468949F8EBAA6ABE5782B47 /* Pods-GraphicMapTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JNG48N5A69;
+				INFOPLIST_FILE = GraphicMapTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.leo.GraphicMapTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GraphicMap.app/GraphicMap";
+			};
+			name = Debug;
+		};
+		B3C1AC2126845A83007C1941 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BCDA07C3E0E7330862567FA /* Pods-GraphicMapTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JNG48N5A69;
+				INFOPLIST_FILE = GraphicMapTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.leo.GraphicMapTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GraphicMap.app/GraphicMap";
+			};
+			name = Release;
+		};
+		B3C1AC2326845A83007C1941 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 56C490E568919DCA2EDDC233 /* Pods-GraphicMap-GraphicMapUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JNG48N5A69;
+				INFOPLIST_FILE = GraphicMapUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.leo.GraphicMapUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GraphicMap;
+			};
+			name = Debug;
+		};
+		B3C1AC2426845A83007C1941 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACCB4E2A00CEBBD78ABDE51B /* Pods-GraphicMap-GraphicMapUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JNG48N5A69;
+				INFOPLIST_FILE = GraphicMapUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.leo.GraphicMapUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GraphicMap;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B3C1ABEA26845A82007C1941 /* Build configuration list for PBXProject "GraphicMap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3C1AC1A26845A83007C1941 /* Debug */,
+				B3C1AC1B26845A83007C1941 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B3C1AC1C26845A83007C1941 /* Build configuration list for PBXNativeTarget "GraphicMap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3C1AC1D26845A83007C1941 /* Debug */,
+				B3C1AC1E26845A83007C1941 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B3C1AC1F26845A83007C1941 /* Build configuration list for PBXNativeTarget "GraphicMapTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3C1AC2026845A83007C1941 /* Debug */,
+				B3C1AC2126845A83007C1941 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B3C1AC2226845A83007C1941 /* Build configuration list for PBXNativeTarget "GraphicMapUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3C1AC2326845A83007C1941 /* Debug */,
+				B3C1AC2426845A83007C1941 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B3C1ABFB26845A82007C1941 /* GraphicMap.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B3C1ABFC26845A82007C1941 /* GraphicMap.xcdatamodel */,
+			);
+			currentVersion = B3C1ABFC26845A82007C1941 /* GraphicMap.xcdatamodel */;
+			path = GraphicMap.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = B3C1ABE726845A82007C1941 /* Project object */;
+}
