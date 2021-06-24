@@ -8,6 +8,7 @@
 4.提供儲存及讀檔，座標為正中央(0,0)，x向右遞增，y向下遞增
 
 ![截圖 2021-06-24 下午5 27 58](https://user-images.githubusercontent.com/59221388/123239364-dcc52500-d511-11eb-970b-5ada8bafb811.png)
+
 ![截圖 2021-06-24 下午5 29 20](https://user-images.githubusercontent.com/59221388/123239378-df277f00-d511-11eb-8217-b8ec68a69e4a.png)
 
 ## 範例:
