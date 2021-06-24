@@ -1,6 +1,6 @@
 # GraphiciMap
 
-##圖形化編輯器
+## 圖形化編輯器
 
 1.提供產生基本物件(可擴充)
 2.Zone可放大縮小移動,Device僅可移動
@@ -10,56 +10,54 @@
 ![截圖 2021-06-24 下午5 27 58](https://user-images.githubusercontent.com/59221388/123239364-dcc52500-d511-11eb-970b-5ada8bafb811.png)
 ![截圖 2021-06-24 下午5 29 20](https://user-images.githubusercontent.com/59221388/123239378-df277f00-d511-11eb-8217-b8ec68a69e4a.png)
 
-##範例:
+## 範例:
 
-###createmap
+### createmap
 
 產生自定義大小地圖
 
 
-###createdesample
+### createdesample
 
-產生各種基本物件
-目前有
-Zone:
-圓形+編輯器
-方形+編輯器
-圓型
-方型
-label標籤
+產生各種基本物件，目前有
+* Zone
+  * 圓形+編輯器
+  * 方形+編輯器
+  * 圓型
+  * 方型
+  * label標籤
 
-(目前僅圖片不同，可自定義)
-Device:
-Light,Sensor,Gateway,Beacon
+* Device(目前僅圖片不同，可自定義)
+  * Light,Sensor,Gateway,Beacon
 
 
-###createdeviceinzone
+### createdeviceinzone
 
 產生Device放進Zone裏面，會計算目前內部裝置相對位置顯示
 要操作zone內的裝置，應另外產生地圖(當成zone)，產生內部裝置物件在地圖上
 
-###zoomin,zoomout
+### zoomin,zoomout
 
 放大縮小
 
-###cleanmap
+### cleanmap
 
 清空地圖
 
 
-###saveData
+### saveData
 
 儲存物件名稱位置
 
-###loadData
+### loadData
 
 讀取資料產生物件
 
 
 
-##Class Diagram
+## Class Diagram
 
-GraphicBaseAbstract -> GraphicBaseZone -> 實作Zone
+    GraphicBaseAbstract -> GraphicBaseZone -> 實作Zone
                     -> GraphicBaseDevice -> 實作Device
                     
-GraphicBaseEditorView -> 實作控制視窗
+    GraphicBaseEditorView -> 實作控制視窗
