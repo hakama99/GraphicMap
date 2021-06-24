@@ -28,7 +28,10 @@
   * label標籤
 
 * Device(目前僅圖片不同，可自定義)
-  * Light,Sensor,Gateway,Beacon
+  * Light
+  * Sensor
+  * Gateway
+  * Beacon
 
 
 ### createdeviceinzone
@@ -54,10 +57,22 @@
 讀取資料產生物件
 
 
+## Protocol
+ 
+    //按下物件回傳
+    @objc func OnItemClick(item:GraphicBaseAbstract)
+    //物件拖拉回傳
+    @objc func OnItemDrag(item:GraphicBaseAbstract,recognizer:UIPanGestureRecognizer)
+    //控制器按下回傳
+    @objc func OnEditorClick(item:GraphicBaseAbstract)
+    //控制器開關回傳
+    @objc func OnEditorPowerClick(item:GraphicBaseAbstract,isOn:Bool)
+
 
 ## Class Diagram
 
     GraphicBaseAbstract -> GraphicBaseZone -> 實作Zone
-                    -> GraphicBaseDevice -> 實作Device
+                        -> GraphicBaseDevice -> 實作Device
                     
     GraphicBaseEditorView -> 實作控制視窗
+
