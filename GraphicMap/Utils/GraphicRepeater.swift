@@ -10,10 +10,10 @@
 
 import UIKit
 
-class GraphicBeacon: GraphicBaseDevice {
+class GraphicRepeater: GraphicBaseDevice {
     
     override var MinorType: GraphicEditorUtils.GraphicDeviceType{
-        return .Beacon
+        return .Repeater
     }
     
     override func initialize() {

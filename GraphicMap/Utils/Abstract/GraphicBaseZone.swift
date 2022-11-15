@@ -13,25 +13,24 @@ import UIKit
 class GraphicBaseZone: GraphicBaseAbstract {
     
     //zone最小size
-    var MINI_SIZE:CGSize{
+    @objc public var MINI_SIZE:CGSize{
         if deviceList.count == 0{
-            return CGSize.init(width: 100, height: 100)
+            return GraphicEditorUtils.MINI_SIZE
         }else{
             let rect = getDeviceRect()
-            return CGSize.init(width: rect.width * GraphicEditorUtils.BASE_SIZE.width, height: rect.height * GraphicEditorUtils.BASE_SIZE.height)
+            return CGSize.init(width: max(rect.width * GraphicEditorUtils.BASE_SIZE.width, GraphicEditorUtils.MINI_SIZE.width), height: max(rect.height * GraphicEditorUtils.BASE_SIZE.height, GraphicEditorUtils.MINI_SIZE.height))
         }
     }
     //選擇顏色
     var SELECT_COLOR = UIColor.init(red: 240, green: 91, blue: 40, alpha: 1)
     var DEFAULT_COLOR = UIColor.init(red: 66, green: 69, blue: 79, alpha: 0.4)
     //縮放按鈕
-    var INSTRUCTION_COLOR = UIColor.init(red: 255, green: 181, blue: 115, alpha: 1)
-    var instructionSize:CGSize = CGSize.init(width: 40, height: 40)
+    private var INSTRUCTION_COLOR = UIColor.init(red: 255, green: 181, blue: 115, alpha: 1)
+    private var instructionSize:CGSize = CGSize.init(width: 30, height: 30)
     //類型
-    var MajorType:GraphicEditorUtils.MajorType{
+    override var MajorType:GraphicEditorUtils.MajorType{
         return .Zone
     }
-    //類型
     var MinorType:GraphicEditorUtils.ZoneType{
         return .Unknow
     }
@@ -39,17 +38,17 @@ class GraphicBaseZone: GraphicBaseAbstract {
     //UI
     
     //物件清單
-    var deviceList:[GraphicBaseDevice] = []
-    var DeviceList:[GraphicBaseDevice]{
-        return deviceList
-    }
+    @objc public  var deviceList:[GraphicBaseAbstract] = []
     //存放子物件
-    var zone:UIView!
+    var zoneView:UIView!
     //縮放按鈕
-    var instruction:UIImageView!
+    var scaleBtn:UIImageView!
+    //縮放按鈕
+    var moveBtn:UIImageView!
     
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        let size = CGSize.init(width: max(frame.width, GraphicEditorUtils.MINI_SIZE.width), height: max(frame.height, GraphicEditorUtils.MINI_SIZE.height))
+        super.init(frame: CGRect.init(origin: frame.origin, size: size))
         initialize()
     }
 
@@ -63,42 +62,60 @@ class GraphicBaseZone: GraphicBaseAbstract {
         deviceList = []
         self.backgroundColor = .clear
         
-        zone = UIView.init(frame: CGRect.init(origin: .zero, size: CGSize.init(width: frame.width, height: frame.height)))
-        zone.backgroundColor = DEFAULT_COLOR
-        zone.clipsToBounds = true
-        zone.isUserInteractionEnabled = false
-        self.addSubview(zone)
+        zoneView = UIView.init(frame: CGRect.init(origin: .zero, size: CGSize.init(width: frame.width, height: frame.height)))
+        zoneView.backgroundColor = DEFAULT_COLOR
+        zoneView.clipsToBounds = true
+        zoneView.isUserInteractionEnabled = false
+        self.addSubview(zoneView)
         
-        instruction = UIImageView.init(frame: CGRect.init(x: frame.width-instructionSize.width, y: 0, width: instructionSize.width, height: instructionSize.height))
-        instruction.image = UIImage.init(named: "ic_control_zone_select_on")?.reSizeImage(reSize: CGSize.init(width: 20, height: 20))
-        instruction.isHidden = true
-        instruction.isUserInteractionEnabled = true
-        self.addSubview(instruction)
+        scaleBtn = UIImageView.init(frame: CGRect.init(x: frame.width, y: -instructionSize.height/scale, width: instructionSize.width/scale, height: instructionSize.height/scale))
+        scaleBtn.image = UIImage.init(named: "ic_add_device_scale")?.reSizeImage(reSize: CGSize.init(width: 20, height: 20))
+        scaleBtn.isHidden = true
+        scaleBtn.isUserInteractionEnabled = true
+        self.addSubview(scaleBtn)
         
-        let gerture = UIPanGestureRecognizer(target:self,action:#selector(gestureResize(recognizer:)))
-        instruction.addGestureRecognizer(gerture)
+        let scaleTap = UIPanGestureRecognizer(target:self,action:#selector(gestureResize(recognizer:)))
+        scaleBtn.addGestureRecognizer(scaleTap)
         
-        let tap = UIPanGestureRecognizer.init(target: self, action: #selector(gestureMove(recognizer:)))
-        self.addGestureRecognizer(tap)
+        
+        moveBtn = UIImageView.init(frame: CGRect.init(x: -instructionSize.width/scale, y: -instructionSize.height/scale, width: instructionSize.width/scale, height: instructionSize.height/scale))
+        moveBtn.image = UIImage.init(named: "ic_add_device_move")?.reSizeImage(reSize: CGSize.init(width: 20, height: 20))
+        moveBtn.isHidden = true
+        moveBtn.isUserInteractionEnabled = true
+        self.addSubview(moveBtn)
+        
+        let moveTap = UIPanGestureRecognizer(target:self,action:#selector(gestureMove(recognizer:)))
+        moveBtn.addGestureRecognizer(moveTap)
     }
     
     override func SetFocus(isSelect:Bool){
         super.SetFocus(isSelect: isSelect)
         
         if self.isSelect{
-            zone?.backgroundColor = SELECT_COLOR
+            zoneView?.backgroundColor = SELECT_COLOR
             
-            instruction?.isHidden = false
+            scaleBtn?.isHidden = false
+            moveBtn?.isHidden = false
         }else{
-            zone?.backgroundColor = DEFAULT_COLOR
+            zoneView?.backgroundColor = DEFAULT_COLOR
             
-            instruction?.isHidden = true
+            scaleBtn?.isHidden = true
+            moveBtn?.isHidden = true
+        }
+        
+        for item in deviceList{
+            if let device = item as? GraphicBaseDevice{
+                device.SetImage(isSelect: isSelect)
+            }else if let zone = item as? GraphicBaseZone{
+                zone.SetFocus(isSelect: isSelect)
+            }
         }
     }
 
     //zoom縮放
     override func Scale(scale: CGFloat) {
         super.Scale(scale: scale)
+        Resize(toSize: size)
     }
     
     //物件調整size
@@ -107,16 +124,55 @@ class GraphicBaseZone: GraphicBaseAbstract {
         self.frame = CGRect.init(x: x - (resize.width - size.width)/2 , y: y - (resize.height - size.height)/2, width: resize.width, height: resize.height)
         gFrame = getGFrame()
         
-        zone.frame = CGRect.init(origin: .zero, size: resize)
+        zoneView.frame = CGRect.init(origin: .zero, size: resize)
         
         
-        instruction.frame = CGRect.init(x: frame.width-instructionSize.width, y: 0, width: instructionSize.width, height: instructionSize.height)
+        scaleBtn.frame = CGRect.init(x: frame.width, y: -instructionSize.height/scale, width: instructionSize.width/scale, height: instructionSize.height/scale)
+        moveBtn.frame = CGRect.init(x: -instructionSize.width/scale, y: -instructionSize.height/scale, width: instructionSize.width/scale, height: instructionSize.height/scale)
         
         reloadPositionInZone()
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let scale = self.convert(point, to: scaleBtn)
+        if scaleBtn.bounds.contains(scale) {
+            return scaleBtn.hitTest(scale, with: event)
+        }
+        let move = self.convert(point, to: moveBtn)
+        if moveBtn.bounds.contains(move) {
+            return moveBtn.hitTest(move, with: event)
+        }
+        let tmp = super.hitTest(point, with: event)
+        return tmp
+    }
+    
+    @objc func AddZone(type:GraphicEditorUtils.ZoneType,gframe:GraphicEditorUtils.GraphicFrame)->GraphicBaseZone{
+        
+        var zone:GraphicBaseZone!
+        switch type {
+        case .SquareControl:
+            zone = GraphicSquareControlZone.init(frame: gframe.frame)
+        case .CircleControl:
+            zone = GraphicCircleControlZone.init(frame: gframe.frame)
+        case .Square:
+            zone = GraphicSquareZone.init(frame: gframe.frame)
+        case .Circle:
+            zone = GraphicCircleZone.init(frame: gframe.frame)
+        case .Label:
+            zone = GraphicLabelZone.init(frame: gframe.frame)
+        default:
+            zone = GraphicBaseZone.init(frame: gframe.frame)
+        }
+        zone.gFrame = gframe
+        zone.Scale(scale: scale)
+        zoneView.addSubview(zone)
+        deviceList.append(zone)
+        reloadPositionInZone()
+        return zone
+    }
+    
     //加入單一裝置
-    func AddDevice(type:GraphicEditorUtils.DeviceType,gframe:GraphicEditorUtils.GraphicFrame)->GraphicBaseDevice{
+    func AddDevice(type:GraphicEditorUtils.GraphicDeviceType,gframe:GraphicEditorUtils.GraphicFrame)->GraphicBaseDevice{
         
         var device:GraphicBaseDevice!
         switch type {
@@ -131,6 +187,15 @@ class GraphicBaseZone: GraphicBaseAbstract {
         case .Gateway:
             device = GraphicGateway.init(frame: gframe.frame)
             break
+        case .Repeater:
+            device = GraphicRepeater.init(frame: gframe.frame)
+            break
+        case .Triac:
+            device = GraphicTriac.init(frame: gframe.frame)
+            break
+        case .Strip:
+            device = GraphicStrip.init(frame: gframe.frame)
+            break
         default:
             device = GraphicBaseDevice.init(frame: gframe.frame)
             break
@@ -140,14 +205,15 @@ class GraphicBaseZone: GraphicBaseAbstract {
         device.gFrame.height = device.DEFAULT_SIZE.height
         device.SetEditorEnable(bo: false)
         device.Scale(scale: scale)
-        zone.addSubview(device)
+        device.isInZone = true
+        zoneView.addSubview(device)
         deviceList.append(device)
         reloadPositionInZone()
         return device
     }
     
     //加入多裝置 gframe大小控制裝置排列
-    func AddDevice(types:[GraphicEditorUtils.DeviceType],gframe:GraphicEditorUtils.GraphicFrame)->[GraphicBaseDevice]{
+    func AddDevice(types:[GraphicEditorUtils.GraphicDeviceType],gframe:GraphicEditorUtils.GraphicFrame)->[GraphicBaseDevice]{
         
         var list = [GraphicBaseDevice]()
         for i in 0..<types.count{
@@ -164,6 +230,15 @@ class GraphicBaseZone: GraphicBaseAbstract {
             case .Gateway:
                 device = GraphicGateway.init(frame: gframe.frame)
                 break
+            case .Repeater:
+                device = GraphicRepeater.init(frame: gframe.frame)
+                break
+            case .Triac:
+                device = GraphicTriac.init(frame: gframe.frame)
+                break
+            case .Strip:
+                device = GraphicStrip.init(frame: gframe.frame)
+                break
             default:
                 device = GraphicBaseDevice.init(frame: gframe.frame)
                 break
@@ -179,7 +254,8 @@ class GraphicBaseZone: GraphicBaseAbstract {
             device.gFrame = position
             device.SetEditorEnable(bo: false)
             device.Scale(scale: scale)
-            zone.addSubview(device)
+            device.isInZone = true
+            zoneView.addSubview(device)
             deviceList.append(device)
             list.append(device)
         }
@@ -191,7 +267,6 @@ class GraphicBaseZone: GraphicBaseAbstract {
     @objc func gestureMove(recognizer:UIPanGestureRecognizer){
         del?.OnItemDrag(item: self,recognizer:recognizer)
         if isSelect,
-           let view = recognizer.view,
            let parent = self.superview{
             //print(view.frame)
             //print(self.frame)
@@ -199,13 +274,13 @@ class GraphicBaseZone: GraphicBaseAbstract {
             let translation = recognizer.translation(in: parent)
             //print(translation)
             //起始
-            var newCenter = CGPoint.init(x: view.x + translation.x, y: view.y + translation.y)
+            var newCenter = CGPoint.init(x: self.x + translation.x, y: self.y + translation.y)
 
             
             //2、限制屏幕范围：
-            let minY:CGFloat = 0
+            let minY:CGFloat = 0 + instructionSize.height / scale
             let maxY:CGFloat = parent.height / scale - gHeight
-            let minX:CGFloat = 0
+            let minX:CGFloat = 0 + instructionSize.width / scale
             let maxX:CGFloat = parent.width / scale - gWidth
             //print("maxx\(maxX)")
             //上边界的限制
@@ -220,7 +295,7 @@ class GraphicBaseZone: GraphicBaseAbstract {
             //del?.OnItemDrag?(item: self,recognizer:recognizer)
             
             
-            view.frame.origin = newCenter
+            self.frame.origin = newCenter
             gFrame = getGFrame()
             
             //3、将手势坐标点归0、否则会累加
@@ -245,6 +320,7 @@ class GraphicBaseZone: GraphicBaseAbstract {
             Resize(toSize: newSize)
             //3、将手势坐标点归0、否则会累加
             recognizer.setTranslation(CGPoint.zero, in: parent)
+            del?.OnItemScale(item: self,recognizer:recognizer)
         }
     }
     
@@ -277,7 +353,7 @@ class GraphicBaseZone: GraphicBaseAbstract {
     //重新調整裝置內位置
     func reloadPositionInZone(){
         for item in deviceList{
-            item.frame = CGRect.init(origin: zone.center.add(point: item.gFrame.frame.origin), size: item.gFrame.frame.size)
+            item.frame = CGRect.init(origin: zoneView.center.add(point: item.gFrame.frame.origin), size: item.gFrame.frame.size)
         }
     }
     

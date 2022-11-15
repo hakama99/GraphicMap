@@ -37,6 +37,10 @@
 		B3C1AC5126846118007C1941 /* GraphicBaseAbstract.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC4C26846118007C1941 /* GraphicBaseAbstract.swift */; };
 		B3C1AC5226846118007C1941 /* GraphicBaseZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC4D26846118007C1941 /* GraphicBaseZone.swift */; };
 		B3C1AC5326846118007C1941 /* GraphicBaseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1AC4E26846118007C1941 /* GraphicBaseMap.swift */; };
+		B3F9B5B2292369A20074109D /* GraphicStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F9B5AE292369A10074109D /* GraphicStrip.swift */; };
+		B3F9B5B3292369A20074109D /* GraphicRepeater.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F9B5AF292369A10074109D /* GraphicRepeater.swift */; };
+		B3F9B5B4292369A20074109D /* GraphicDeviceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F9B5B0292369A20074109D /* GraphicDeviceSet.swift */; };
+		B3F9B5B5292369A20074109D /* GraphicTriac.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F9B5B1292369A20074109D /* GraphicTriac.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +101,10 @@
 		B3C1AC4C26846118007C1941 /* GraphicBaseAbstract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBaseAbstract.swift; sourceTree = "<group>"; };
 		B3C1AC4D26846118007C1941 /* GraphicBaseZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBaseZone.swift; sourceTree = "<group>"; };
 		B3C1AC4E26846118007C1941 /* GraphicBaseMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicBaseMap.swift; sourceTree = "<group>"; };
+		B3F9B5AE292369A10074109D /* GraphicStrip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicStrip.swift; sourceTree = "<group>"; };
+		B3F9B5AF292369A10074109D /* GraphicRepeater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicRepeater.swift; sourceTree = "<group>"; };
+		B3F9B5B0292369A20074109D /* GraphicDeviceSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicDeviceSet.swift; sourceTree = "<group>"; };
+		B3F9B5B1292369A20074109D /* GraphicTriac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicTriac.swift; sourceTree = "<group>"; };
 		DC024568FA5DB96ECCC268BA /* Pods-GraphicMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraphicMap.release.xcconfig"; path = "Target Support Files/Pods-GraphicMap/Pods-GraphicMap.release.xcconfig"; sourceTree = "<group>"; };
 		F97E29E9018F285C2795ADDE /* Pods_GraphicMap_GraphicMapUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GraphicMap_GraphicMapUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -211,20 +219,24 @@
 		B3C1AC2B26846002007C1941 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				B3C1AC4926846118007C1941 /* Abstract */,
-				B3C1AC2C26846029007C1941 /* GraphicBeacon.swift */,
-				B3C1AC3026846029007C1941 /* GraphicCircleControlZone.swift */,
-				B3C1AC3426846029007C1941 /* GraphicCircleZone.swift */,
-				B3C1AC3526846029007C1941 /* GraphicDeviceEditorView.swift */,
 				B3C1AC3326846029007C1941 /* GraphicEditorUtils.swift */,
-				B3C1AC3726846029007C1941 /* GraphicGateway.swift */,
-				B3C1AC2E26846029007C1941 /* GraphicLabelZone.swift */,
-				B3C1AC3226846029007C1941 /* GraphicLight.swift */,
 				B3C1AC3126846029007C1941 /* GraphicMap.swift */,
-				B3C1AC2D26846029007C1941 /* GraphicSensor.swift */,
+				B3C1AC4926846118007C1941 /* Abstract */,
+				B3C1AC3026846029007C1941 /* GraphicCircleControlZone.swift */,
 				B3C1AC3626846029007C1941 /* GraphicSquareControlZone.swift */,
+				B3C1AC3426846029007C1941 /* GraphicCircleZone.swift */,
 				B3C1AC2F26846029007C1941 /* GraphicSquareZone.swift */,
+				B3C1AC2E26846029007C1941 /* GraphicLabelZone.swift */,
+				B3C1AC3526846029007C1941 /* GraphicDeviceEditorView.swift */,
 				B3C1AC3826846029007C1941 /* GraphicZoneEditorView.swift */,
+				B3C1AC3726846029007C1941 /* GraphicGateway.swift */,
+				B3C1AC3226846029007C1941 /* GraphicLight.swift */,
+				B3C1AC2D26846029007C1941 /* GraphicSensor.swift */,
+				B3F9B5B0292369A20074109D /* GraphicDeviceSet.swift */,
+				B3F9B5AF292369A10074109D /* GraphicRepeater.swift */,
+				B3F9B5AE292369A10074109D /* GraphicStrip.swift */,
+				B3F9B5B1292369A20074109D /* GraphicTriac.swift */,
+				B3C1AC2C26846029007C1941 /* GraphicBeacon.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -495,11 +507,15 @@
 				B3C1AC4226846029007C1941 /* GraphicDeviceEditorView.swift in Sources */,
 				B3C1AC4326846029007C1941 /* GraphicSquareControlZone.swift in Sources */,
 				B3C1ABF526845A82007C1941 /* SceneDelegate.swift in Sources */,
+				B3F9B5B4292369A20074109D /* GraphicDeviceSet.swift in Sources */,
 				B3C1AC5126846118007C1941 /* GraphicBaseAbstract.swift in Sources */,
+				B3F9B5B5292369A20074109D /* GraphicTriac.swift in Sources */,
 				B3C1AC3A26846029007C1941 /* GraphicSensor.swift in Sources */,
 				B3C1AC5226846118007C1941 /* GraphicBaseZone.swift in Sources */,
 				B3C1AC3D26846029007C1941 /* GraphicCircleControlZone.swift in Sources */,
+				B3F9B5B2292369A20074109D /* GraphicStrip.swift in Sources */,
 				B3C1ABFD26845A82007C1941 /* GraphicMap.xcdatamodeld in Sources */,
+				B3F9B5B3292369A20074109D /* GraphicRepeater.swift in Sources */,
 				B3C1AC3C26846029007C1941 /* GraphicSquareZone.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

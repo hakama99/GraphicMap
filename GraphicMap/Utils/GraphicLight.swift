@@ -12,7 +12,7 @@ import UIKit
 
 class GraphicLight: GraphicBaseDevice {
     
-    override var MinorType: GraphicEditorUtils.DeviceType{
+    override var MinorType: GraphicEditorUtils.GraphicDeviceType{
         return .Light
     }
 }

@@ -12,16 +12,17 @@ import UIKit
 
 @objc protocol GraphicMapDelegate {
     @objc func OnItemClick(item:GraphicBaseAbstract)
-    @objc func OnItemDrag(item:GraphicBaseAbstract,recognizer:UIPanGestureRecognizer)
+    @objc func OnItemDragEnd(item:GraphicBaseAbstract,recognizer:UIPanGestureRecognizer)
+    @objc func OnItemScaleEnd(item:GraphicBaseAbstract,recognizer:UIPanGestureRecognizer)
     @objc func OnEditorClick(item:GraphicBaseAbstract)
     @objc func OnEditorPowerClick(item:GraphicBaseAbstract,isOn:Bool)
 }
 
-open class GraphicMap: UIControl {
+class GraphicMap: UIControl {
     
-    var del:GraphicMapDelegate!
+    @objc public var del:GraphicMapDelegate!
     //地圖大小(基本單位)
-    var mapSize:CGSize = CGSize.init(width: 400, height: 400)
+    var mapSize:CGSize = GraphicEditorUtils.MAP_SIZE
     //控制zoom
     var isZoom = false
     //當前比例
@@ -29,26 +30,30 @@ open class GraphicMap: UIControl {
     //物件移動計算
     var movePoint:CGPoint = .zero
     var moveItem:GraphicBaseAbstract!
+    //是否可以控制
+    var canControl:Bool = true
+    //可否選擇,移動
+    var isEdit:Bool = true
+    //初始化 第一次顯示物件要照xy排序
+    @objc var initial:Bool = false
     
     //UI
     var timer:Timer!
     var scrollview:UIScrollView!
     //地圖基底
-    var map:GraphicBaseMap!
+    @objc var map:GraphicBaseMap!
+    @objc var mapImage:UIImageView!
     //地圖背景
     var mapBackground:UIImageView!
     //物件清單
     var deviceList:[GraphicBaseAbstract] = []
-    var DeviceList:[GraphicBaseAbstract]{
-        return deviceList
-    }
     //focus物件
     var focusList:[GraphicBaseAbstract] = []
-    var FocusList:[GraphicBaseAbstract]{
+    @objc public var FocusList:[GraphicBaseAbstract]{
         return focusList
     }
     
-    convenience init(frame: CGRect,mapSize:CGSize) {
+    @objc public convenience init(frame: CGRect,mapSize:CGSize) {
         self.init(frame: frame)
         self.mapSize = mapSize
         initialize()
@@ -63,13 +68,14 @@ open class GraphicMap: UIControl {
     }
     
     private func initialize() {
+        initial = true
         timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(update), userInfo: nil, repeats: true)
         deviceList = []
         
         self.backgroundColor = .clear
         
-        zoomScale = GraphicEditorUtils.ZOOM_MAX_SCALE
-        let mapSize = CGSize.init(width: mapSize.width * GraphicEditorUtils.BASE_SIZE.width * zoomScale, height: mapSize.height * GraphicEditorUtils.BASE_SIZE.height * zoomScale)
+        let realMapSize = CGSize.init(width: self.mapSize.width * GraphicEditorUtils.BASE_SIZE.width, height: self.mapSize.height * GraphicEditorUtils.BASE_SIZE.height)
+        let zoom = GraphicEditorUtils.ZOOM_MAX_SCALE
         
         scrollview = UIScrollView.init(frame: bounds)
         scrollview.contentSize = mapSize
@@ -88,34 +94,29 @@ open class GraphicMap: UIControl {
 
         
         // 縮放元件的預設縮放大小
-        scrollview.zoomScale = zoomScale
+        scrollview.zoomScale = zoom
         // 縮放元件可縮小到的最小倍數sLE
         scrollview.minimumZoomScale = GraphicEditorUtils.ZOOM_MIN_SCALE
         // 縮放元件可放大到的最大倍數
         scrollview.maximumZoomScale = GraphicEditorUtils.ZOOM_MAX_SCALE
         // 縮放元件縮放時是否在超過縮放倍數後使用彈回效果
         scrollview.bouncesZoom = false
+        scrollview.alwaysBounceHorizontal = false
+        scrollview.alwaysBounceVertical = false
+        scrollview.bounces = false
         // 設置委任對象
         scrollview.delegate = self
-        // 起始的可見視圖偏移量 預設為 (0, 0)
-        // 設定這個值後 就會將原點滑動至這個點起始
-        if mapSize.width > frame.width && mapSize.height > frame.height{
-            scrollview.contentOffset = CGPoint(
-                x: mapSize.width/2 - frame.width / 2, y: mapSize.height/2 - frame.height / 2)
-        }else{
-            scrollview.contentOffset = .zero
-        }
         // 以一頁為單位滑動
         scrollview.isPagingEnabled = false
         self.addSubview(scrollview)
         
-        map = GraphicBaseMap.init(frame: CGRect.init(origin: CGPoint.zero, size: mapSize))
+        map = GraphicBaseMap.init(frame: CGRect.init(origin: CGPoint.zero, size: realMapSize))
         map.del = self
         map.backgroundColor = .clear
         scrollview.addSubview(map)
         
         mapBackground = UIImageView.init()
-        mapBackground.frame = CGRect.init(origin: CGPoint.zero, size: mapSize)
+        mapBackground.frame = CGRect.init(origin: CGPoint.zero, size: realMapSize)
         mapBackground.contentMode = .topLeft
         if let image = GraphicEditorUtils.BackgroundImage(size: GraphicEditorUtils.BASE_SIZE)?.resizableImage(withCapInsets: UIEdgeInsets.init(top: 0, left:0, bottom: 0, right: 0), resizingMode: .tile){
             mapBackground.backgroundColor = UIColor.init(patternImage: image)
@@ -124,9 +125,21 @@ open class GraphicMap: UIControl {
         mapBackground.alpha = 1
         //mapBackground.image = image
         map.addSubview(mapBackground)
+        
+        mapImage = UIImageView.init()
+        mapImage.frame = CGRect.init(origin: CGPoint.zero, size: realMapSize)
+        mapImage.contentMode = .scaleAspectFit
+        map.addSubview(mapImage)
+        
+        initZoomScale(scale: zoom)
     }
     
-    func Clean(){
+    @objc func UpdateFrame(frame:CGRect){
+        self.frame = frame
+        scrollview.frame = bounds
+    }
+    
+    @objc func Clean(){
         for item in deviceList{
             if let base = item as? GraphicBaseZone{
                 base.Clean()
@@ -137,14 +150,26 @@ open class GraphicMap: UIControl {
         deviceList = []
     }
     
-    func Destroy(){
+    @objc func setImage(byte:String,scale:CGFloat){
+        if byte.count > 0, let data = Data.init(base64Encoded: byte, options: []){
+            mapImage.image =  UIImage.init(data: data)
+            let realMapSize = CGSize.init(width: self.mapSize.width * GraphicEditorUtils.BASE_SIZE.width, height: self.mapSize.height * GraphicEditorUtils.BASE_SIZE.height)
+            mapImage.frame = CGRect.init(x: realMapSize.width*(1-scale)/2, y: realMapSize.height*(1-scale)/2, width: realMapSize.width*scale, height: realMapSize.height*scale)
+            map.sendSubviewToBack(mapImage)
+            map.sendSubviewToBack(mapBackground)
+        }else{
+            mapImage.image = nil
+        }
+    }
+    
+    @objc func Destroy(){
         timer?.invalidate()
         timer = nil
         
         self.removeFromSuperview()
     }
     
-    func AddZone(type:GraphicEditorUtils.ZoneType,gframe:GraphicEditorUtils.GraphicFrame)->GraphicBaseZone{
+    @objc func AddZone(type:GraphicEditorUtils.ZoneType,gframe:GraphicEditorUtils.GraphicFrame)->GraphicBaseZone{
         
         var zone:GraphicBaseZone!
         switch type {
@@ -161,17 +186,18 @@ open class GraphicMap: UIControl {
         default:
             zone = GraphicBaseZone.init(frame: gframe.frame)
         }
+        map.addSubview(zone)
+        deviceList.append(zone)
         zone.gFrame = gframe
         zone.del = self
         //先設定原點為中心點再移動至grame座標
         zone.frame.origin = CGPoint.init(x: map.center.x / zoomScale + gframe.frame.minX, y: map.center.y / zoomScale + gframe.frame.minY)
         zone.Scale(scale: zoomScale)
-        map.addSubview(zone)
-        deviceList.append(zone)
+        zone.SetControl(canControl: !isEdit && canControl)
         return zone
     }
     
-    func AddDevice(type:GraphicEditorUtils.DeviceType,gframe:GraphicEditorUtils.GraphicFrame)->GraphicBaseDevice{
+    @objc func AddDevice(type:GraphicEditorUtils.GraphicDeviceType,gframe:GraphicEditorUtils.GraphicFrame)->GraphicBaseDevice{
         
         var device:GraphicBaseDevice!
         switch type {
@@ -186,10 +212,21 @@ open class GraphicMap: UIControl {
         case .Gateway:
             device = GraphicGateway.init(frame: gframe.frame)
             break
+        case .Repeater:
+            device = GraphicRepeater.init(frame: gframe.frame)
+            break
+        case .Triac:
+            device = GraphicTriac.init(frame: gframe.frame)
+            break
+        case .Strip:
+            device = GraphicStrip.init(frame: gframe.frame)
+            break
         default:
             device = GraphicBaseDevice.init(frame: gframe.frame)
             break
         }
+        map.addSubview(device)
+        deviceList.append(device)
         device.gFrame = gframe
         device.gFrame.width = device.DEFAULT_SIZE.width
         device.gFrame.height = device.DEFAULT_SIZE.height
@@ -197,12 +234,11 @@ open class GraphicMap: UIControl {
         //先設定原點為中心點再移動至grame座標
         device.frame.origin = CGPoint.init(x: map.center.x / zoomScale + gframe.frame.minX, y: map.center.y / zoomScale + gframe.frame.minY)
         device.Scale(scale: zoomScale)
-        map.addSubview(device)
-        deviceList.append(device)
+        device.SetControl(canControl: !isEdit && canControl)
         return device
     }
     
-    func AddDevice(types:[GraphicEditorUtils.DeviceType],gframe:GraphicEditorUtils.GraphicFrame)->[GraphicBaseDevice]{
+    func AddDevice(types:[GraphicEditorUtils.GraphicDeviceType],gframe:GraphicEditorUtils.GraphicFrame)->[GraphicBaseDevice]{
         
         var list = [GraphicBaseDevice]()
         for i in 0..<types.count{
@@ -219,9 +255,17 @@ open class GraphicMap: UIControl {
             case .Gateway:
                 device = GraphicGateway.init(frame: gframe.frame)
                 break
+            case .Repeater:
+                device = GraphicRepeater.init(frame: gframe.frame)
+                break
+            case .Triac:
+                device = GraphicTriac.init(frame: gframe.frame)
+                break
+            case .Strip:
+                device = GraphicStrip.init(frame: gframe.frame)
+                break
             default:
                 device = GraphicBaseDevice.init(frame: gframe.frame)
-                break
             }
             let zoneSize = CGSize.init(width: device.gWidth / GraphicEditorUtils.BASE_SIZE.width + 1, height: device.gHeight / GraphicEditorUtils.BASE_SIZE.height + 1)
             //device.gFrame = gframe
@@ -234,6 +278,62 @@ open class GraphicMap: UIControl {
             device.gFrame = position
             device.frame.origin = CGPoint.init(x: map.center.x / zoomScale + position.frame.minX, y: map.center.y / zoomScale + position.frame.minY)
             device.Scale(scale: zoomScale)
+            device.SetControl(canControl: !isEdit && canControl)
+            device.del = self
+            map.addSubview(device)
+            deviceList.append(device)
+            list.append(device)
+        }
+        return list
+    }
+    
+    //obj無法使用自定義數組
+    @objc func AddDevice(types:NSArray,gframe:GraphicEditorUtils.GraphicFrame)->[GraphicBaseDevice]{
+        
+        var list = [GraphicBaseDevice]()
+        for i in 0..<types.count{
+            var device:GraphicBaseDevice!
+            if let type = types[i] as? GraphicEditorUtils.GraphicDeviceType{
+                switch type {
+                case .Light:
+                    device = GraphicLight.init(frame: gframe.frame)
+                case .Beacon:
+                    device = GraphicBeacon.init(frame: gframe.frame)
+                    break
+                case .Sensor:
+                    device = GraphicSensor.init(frame: gframe.frame)
+                    break
+                case .Gateway:
+                    device = GraphicGateway.init(frame: gframe.frame)
+                    break
+                case .Repeater:
+                    device = GraphicRepeater.init(frame: gframe.frame)
+                    break
+                case .Triac:
+                    device = GraphicTriac.init(frame: gframe.frame)
+                    break
+                case .Strip:
+                    device = GraphicStrip.init(frame: gframe.frame)
+                    break
+                default:
+                    device = GraphicBaseDevice.init(frame: gframe.frame)
+                    break
+                }
+            }else{
+                device = GraphicBaseDevice.init(frame: gframe.frame)
+            }
+            let zoneSize = CGSize.init(width: device.gWidth / GraphicEditorUtils.BASE_SIZE.width + 1, height: device.gHeight / GraphicEditorUtils.BASE_SIZE.height + 1)
+            //device.gFrame = gframe
+            //先設定原點為中心點再移動至grame座標
+            var perLine:Int = Int(gframe.width / zoneSize.width)
+            perLine = max(perLine, 1)
+            let x = CGFloat(i % perLine) * (zoneSize.width)
+            let y = CGFloat(i/perLine) * (zoneSize.height)
+            let position = GraphicEditorUtils.GraphicFrame.init(x: gframe.x + x , y: gframe.y + y, width: device.DEFAULT_SIZE.width, height: device.DEFAULT_SIZE.height)
+            device.gFrame = position
+            device.frame.origin = CGPoint.init(x: map.center.x / zoomScale + position.frame.minX, y: map.center.y / zoomScale + position.frame.minY)
+            device.Scale(scale: zoomScale)
+            device.SetControl(canControl: !isEdit && canControl)
             map.addSubview(device)
             deviceList.append(device)
             list.append(device)
@@ -242,11 +342,11 @@ open class GraphicMap: UIControl {
     }
     
     
-    func GetZoomScale()->CGFloat{
+    @objc func GetZoomScale()->CGFloat{
         return zoomScale
     }
     
-    func SetZoomScale(scale:CGFloat){
+    @objc func SetZoomScale(scale:CGFloat){
         if scale < GraphicEditorUtils.ZOOM_MIN_SCALE  || scale > GraphicEditorUtils.ZOOM_MAX_SCALE{
             return
         }
@@ -277,7 +377,19 @@ open class GraphicMap: UIControl {
         for item in deviceList{
             item.Scale(scale: zoomScale)
         }
-        //print(scrollview.contentSize)
+    }
+    
+    @objc func initZoomScale(scale:CGFloat){
+        if scale < GraphicEditorUtils.ZOOM_MIN_SCALE  || scale > GraphicEditorUtils.ZOOM_MAX_SCALE{
+            return
+        }
+        SetZoomScale(scale: scale)
+        let mapSize = CGSize.init(width: self.mapSize.width * GraphicEditorUtils.BASE_SIZE.width * zoomScale, height: self.mapSize.height * GraphicEditorUtils.BASE_SIZE.height * zoomScale)
+        if mapSize.width > frame.width && mapSize.height > frame.height{
+            scrollview.contentOffset = CGPoint(x: mapSize.width/2 - frame.width / 2 + 20, y: mapSize.height/2 - frame.height / 2 + 20)
+        }else{
+            scrollview.contentOffset = .zero
+        }
     }
 
     //每幀更新可見範圍，如果移動物件在邊緣也要移動(操作體感)
@@ -376,13 +488,24 @@ open class GraphicMap: UIControl {
         return .zero
     }
     
-    func GetMapRect()->GraphicEditorUtils.GraphicFrame{
+    @objc func GetMapRect()->GraphicEditorUtils.GraphicFrame{
         
         let unit = 1 / GraphicEditorUtils.BASE_SIZE.width / zoomScale
         let x = scrollview.contentOffset.x * unit - mapSize.width / 2
         let y = scrollview.contentOffset.y * unit - mapSize.height / 2
             
         return GraphicEditorUtils.GraphicFrame.init(x: x, y: y, width: scrollview.width * unit, height: scrollview.height * unit)
+    }
+    
+    @objc func SetControl(enable:Bool){
+        canControl = enable
+        for item in deviceList{
+            item.SetControl(canControl: !isEdit && canControl)
+        }
+    }
+    
+    @objc func SetEdit(_ bo:Bool){
+        isEdit = bo
     }
 }
 
@@ -422,54 +545,48 @@ extension GraphicMap:UIScrollViewDelegate{
         // 所以縮放完後再將 contentSize 設回原本大小
         //scrollView.contentSize = CGSize.init(width: mapWidth * BASE_SIZE.width, height: mapHight * BASE_SIZE.height)
     }
+    
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        //停止慣性滾動
+        scrollView.setContentOffset(scrollView.contentOffset, animated: false)
+    }
 }
 
 
 extension GraphicMap:GraphicBaseAbstractDelegate{
     func OnItemClick(item: GraphicBaseAbstract) {
-        //zone 單選  device多選
-        if item is GraphicBaseDevice{
-            if let first = focusList.first,first is GraphicBaseZone{
-                for i in focusList{
-                    i.SetFocus(isSelect: false)
-                }
-                focusList = []
-            }
-        }else{
+        if !isEdit{
+            return
+        }
+        if !canControl{
+            return
+        }
+
+        if item == map{
             for i in focusList{
                 i.SetFocus(isSelect: false)
             }
             focusList = []
-        }
-        
-        
-        if item == map{
-        
         }else if let index = focusList.firstIndex(of: item){
             focusList.remove(at: index)
             item.SetFocus(isSelect: false)
+            del?.OnItemClick(item: item)
         }else{
             focusList.append(item)
             map.bringSubviewToFront(item)
             item.SetFocus(isSelect: true)
+            del?.OnItemClick(item: item)
         }
-        
-        if focusList.first is GraphicBaseZone{
-            scrollview.isScrollEnabled = false
-        }else{
-            scrollview.isScrollEnabled = true
-        }
-        
-        del?.OnEditorClick(item: item)
     }
     
     func OnItemDrag(item: GraphicBaseAbstract,recognizer:UIPanGestureRecognizer) {
-        if recognizer.state == .ended{
-            movePoint = .zero
-            return
-        }
-        
+
         if focusList.contains(item){
+            if recognizer.state == .ended{
+                movePoint = .zero
+                del?.OnItemDragEnd(item: item, recognizer: recognizer)
+                return
+            }
             moveItem = item
             let translation = recognizer.translation(in: map)
             //print("translation\(translation)")
@@ -478,7 +595,6 @@ extension GraphicMap:GraphicBaseAbstractDelegate{
             if offset != .zero{
                 movePoint = offset
             }
-            del?.OnItemDrag(item: item, recognizer: recognizer)
         }else{
             if scrollview.contentSize.width < scrollview.width || scrollview.contentSize.height < scrollview.height{
                 return
@@ -492,6 +608,12 @@ extension GraphicMap:GraphicBaseAbstractDelegate{
             recognizer.setTranslation(CGPoint.zero, in: recognizer.view?.superview)
         }
         
+    }
+    
+    func OnItemScale(item: GraphicBaseAbstract, recognizer: UIPanGestureRecognizer) {
+        if recognizer.state == .ended{
+            del?.OnItemScaleEnd(item: item, recognizer: recognizer)
+        }
     }
     
     func OnEditorClick(item: GraphicBaseAbstract) {

@@ -12,7 +12,7 @@ import UIKit
 
 class GraphicGateway: GraphicBaseDevice {
 
-    override var MinorType: GraphicEditorUtils.DeviceType{
+    override var MinorType: GraphicEditorUtils.GraphicDeviceType{
         return .Gateway
     }
 }

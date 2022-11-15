@@ -10,16 +10,10 @@
 
 import UIKit
 
-class GraphicBeacon: GraphicBaseDevice {
+class GraphicDeviceSet: GraphicBaseDevice {
     
     override var MinorType: GraphicEditorUtils.GraphicDeviceType{
-        return .Beacon
-    }
-    
-    override func initialize() {
-        super.initialize()
-        editView?.powerBtn?.removeFromSuperview()
-        editView?.powerBtn = nil
+        return .DeviceSet
     }
 }
 

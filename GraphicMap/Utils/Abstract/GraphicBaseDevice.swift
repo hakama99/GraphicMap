@@ -12,13 +12,13 @@ import UIKit
 class GraphicBaseDevice: GraphicBaseAbstract {
     
     //裝置基本大小
-    var DEFAULT_SIZE:CGSize = CGSize.init(width: 5, height: 2)
+    public var DEFAULT_SIZE:CGSize = CGSize.init(width: 5, height: 2)
     
-    var SELECT_COLOR = UIColor.init(red: 240, green: 91, blue: 40, alpha: 1)
-    var DEFAULT_COLOR = UIColor.init(red: 66, green: 69, blue: 79, alpha: 0.4)
+    private var SELECT_COLOR = UIColor.init(red: 240, green: 91, blue: 40, alpha: 1)
+    private var DEFAULT_COLOR = UIColor.init(red: 66, green: 69, blue: 79, alpha: 0.4)
 
-    var isOn:Bool = false
-    var isOut:Bool = false
+    @objc public var isOut:Bool = false
+    @objc public var isInZone:Bool = false
     
     //包含額外物件(編輯bar)之寬高
     override var gWidth: CGFloat{
@@ -28,13 +28,13 @@ class GraphicBaseDevice: GraphicBaseAbstract {
         return self.height + editView.height
     }
     //類型
-    var MajorType:GraphicEditorUtils.MajorType{
+    override var MajorType:GraphicEditorUtils.MajorType{
         return .Device
     }
-    //類型
-    var MinorType:GraphicEditorUtils.DeviceType{
+    var MinorType:GraphicEditorUtils.GraphicDeviceType{
         return .Unknow
     }
+    
     override var Name: String{
         get{
             return editView?.GetName() ?? ""
@@ -45,7 +45,7 @@ class GraphicBaseDevice: GraphicBaseAbstract {
     }
     
     //UI
-    var deviceImage:UIButton!
+    var deviceImage:UIImageView!
     var editView:GraphicDeviceEditorView!
     
     override init(frame: CGRect) {
@@ -62,36 +62,26 @@ class GraphicBaseDevice: GraphicBaseAbstract {
     override func initialize() {
         self.backgroundColor = .clear
         
-        deviceImage = UIButton.init(frame: CGRect.init(origin: .zero, size: size))
+        deviceImage = UIImageView.init(frame: CGRect.init(origin: .zero, size: size))
         deviceImage.contentMode = .scaleAspectFit
-        deviceImage.isUserInteractionEnabled = false
         self.addSubview(deviceImage)
         
         editView = GraphicDeviceEditorView.init(frame: CGRect.init(x: (frame.width - GraphicEditorUtils.DEVICE_EDITOR_SIZE.width) / 2, y: frame.height, width: GraphicEditorUtils.DEVICE_EDITOR_SIZE.width, height: GraphicEditorUtils.DEVICE_EDITOR_SIZE.height))
+        editView.SetFocus(isSelect: false)
+        editView.del = self
         self.addSubview(editView)
         
         let tap = UIPanGestureRecognizer.init(target: self, action: #selector(gestureMove(recognizer:)))
         self.addGestureRecognizer(tap)
         
         SetFocus(isSelect: false)
-        SetStatus(isSelect: false, isOn: false)
     }
     
     override func SetFocus(isSelect: Bool) {
         super.SetFocus(isSelect: isSelect)
         editView?.SetFocus(isSelect: isSelect)
         
-        SetStatus(isSelect: isSelect)
-    }
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let editorpoint = self.convert(point, to: editView)
-        if let view = editView,view.bounds.contains(editorpoint) {
-            return editView.hitTest(editorpoint, with: event)
-        }
-        let tmp = super.hitTest(point, with: event)
-        //print("GraphicBaseZone\(tmp)")
-        return tmp
+        SetImage()
     }
     
     override func Scale(scale: CGFloat) {
@@ -113,7 +103,37 @@ class GraphicBaseDevice: GraphicBaseAbstract {
         editView?.Resize()
     }
     
-    func SetStatus(isSelect:Bool? = nil,isOn:Bool? = nil,isOut:Bool? = nil){
+    override func SetPower(isOn: Bool) {
+        super.SetPower(isOn: isOn)
+        editView?.SetPower(isOn: self.isOn)
+        SetImage()
+    }
+    
+    override func SetControl(canControl: Bool) {
+        super.SetControl(canControl: canControl)
+        editView?.powerBtn?.isHidden = !canControl
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        
+        let tmp = super.hitTest(point, with: event)
+        let editorpoint = self.convert(point, to: editView)
+        if let view = editView,view.bounds.contains(editorpoint) {
+            return editView.hitTest(editorpoint, with: event)
+        }
+        //print("GraphicBaseZone\(tmp)")
+        return tmp
+    }
+    
+    @objc public func SetOffline(isOut:Bool){
+        self.isOut = isOut
+        
+
+        editView?.SetStatus(isOut: self.isOut)
+        SetImage()
+    }
+    
+    func SetImage(isSelect:Bool? = nil,isOn:Bool? = nil,isOut:Bool? = nil){
         if let bo = isSelect{
             self.isSelect = bo
         }
@@ -124,12 +144,13 @@ class GraphicBaseDevice: GraphicBaseAbstract {
             self.isOut = bo
         }
         
-        deviceImage.setImage(GraphicEditorUtils.GetDeviceImage(type: MinorType,isSelect: self.isSelect,isOn: self.isOn,isOut: self.isOut), for: .normal)
+        deviceImage.image = GraphicEditorUtils.GetDeviceImage(type: MinorType,isSelect: self.isSelect,isOn: self.isOn,isOut: self.isOut)
         
         editView?.SetStatus(isOut: self.isOut)
+        editView?.SetPower(isOn: self.isOn)
     }
     
-    func SetEditorEnable(bo:Bool){
+    @objc public func SetEditorEnable(bo:Bool){
         editView?.isHidden = !bo
     }
 
@@ -169,5 +190,15 @@ class GraphicBaseDevice: GraphicBaseAbstract {
             //3、将手势坐标点归0、否则会累加
             recognizer.setTranslation(CGPoint.zero, in: parent)
         }
+    }
+}
+
+extension GraphicBaseDevice:GraphicBaseEditorViewDelegate{
+    func OnEditorClick() {
+        del.OnEditorClick(item: self)
+    }
+    
+    func OnPowerClick(isOn: Bool) {
+        del.OnEditorPowerClick(item: self, isOn: isOn)
     }
 }

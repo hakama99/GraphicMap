@@ -32,6 +32,7 @@ class GraphicDeviceEditorView: GraphicBaseEditorView {
         nameBtn.contentHorizontalAlignment = .center
         nameBtn.contentEdgeInsets = .init(top: 0, left: 10, bottom: 0, right: 10)
         nameBtn.frame = CGRect.init(origin: .zero, size: CGSize.init(width: width, height: height / 2))
+        nameBtn.isUserInteractionEnabled = false
         
         powerBtn.frame = CGRect.init(x: 0, y: height/2, width: width, height: height/2)
         

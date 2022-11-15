@@ -10,27 +10,32 @@ import Foundation
 import UIKit
 import SwiftyJSON
 
-class GraphicEditorUtils {
+class GraphicEditorUtils:NSObject {
     //縮放大小
-    static var ZOOM_MIN_SCALE:CGFloat = 0.1
+    static var ZOOM_MIN_SCALE:CGFloat = 0.4
     static var ZOOM_MAX_SCALE:CGFloat = 1.0
     //基本單位大小
     static var BASE_SIZE:CGSize = CGSize.init(width: 20, height: 20)
-    //編輯bar高度
+    //地圖大小
+    @objc static var MAP_SIZE:CGSize = CGSize.init(width: 600, height: 600)
+    //物件最小size pixel
+    static var MINI_SIZE:CGSize = CGSize.init(width: 100, height: 100)
+    //編輯bar高度 pixel
     static var ZONE_EDITOR_SIZE:CGSize = CGSize.init(width: 100, height: 41)
-    //裝置編輯bar size
+    //裝置編輯bar size pixel
     static var DEVICE_EDITOR_SIZE = CGSize.init(width: 111, height: 57)
     //弧度
     static var DEFAULT_RADIUS:CGFloat = 8
     //預設字型
     static var FONT_NAME:String = "PingFangTC-Regular"
-    struct GraphicFrame {
-        var x:CGFloat = 0
-        var y:CGFloat = 0
-        var width:CGFloat = 0
-        var height:CGFloat = 0
+    @objc public static var UPLOAD_LIMIT = 512000
+    @objc public class GraphicFrame:NSObject {
+        @objc public var x:CGFloat = 0
+        @objc public var y:CGFloat = 0
+        @objc public var width:CGFloat = 0
+        @objc public var height:CGFloat = 0
         
-        var frame:CGRect{
+        @objc public var frame:CGRect{
             return CGRect.init(x: x*BASE_SIZE.width, y: y*BASE_SIZE.height, width: width*BASE_SIZE.width, height: height*BASE_SIZE.height)
         }
         
@@ -73,32 +78,52 @@ class GraphicEditorUtils {
             self.height = height
         }
         
-        init() {
-
+        override init() {
+            
         }
     }
     
-    public enum MajorType:Int {
+    @objc static var MapSize:[MapModel] = [
+        MapModel.init(title: NSLocalizedString("text_map_size_big", comment: ""), size: 800),
+        MapModel.init(title: NSLocalizedString("text_map_size_middle", comment: ""), size: 600),
+        MapModel.init(title: NSLocalizedString("text_map_size_small", comment: ""), size: 400)
+    ]
+    
+    @objc class MapModel:NSObject{
+        @objc var title:String = ""
+        @objc var size:Int = 0
+        
+        init(title:String,size:Int) {
+            self.title = title
+            self.size = size
+        }
+    }
+    
+    @objc public enum MajorType:Int {
         case Zone
         case Device
+        case Unknow = -1
     }
 
-    public enum ZoneType:Int {
+    @objc public enum ZoneType:Int {
         case SquareControl
         case CircleControl
         case Square
         case Circle
         case Label
-        case Unknow
+        case Unknow = -1
     }
     
-    public enum DeviceType:Int {
+    @objc public enum GraphicDeviceType:Int {
         case Light
         case Beacon
         case Sensor
         case Gateway
         case Repeater
-        case Unknow
+        case Triac
+        case Strip
+        case DeviceSet
+        case Unknow = -1
     }
 
     //方格背景
@@ -122,7 +147,7 @@ class GraphicEditorUtils {
         return nil
     }
     
-    static func GetDeviceImage(type:DeviceType,isSelect:Bool = false,isOn:Bool = false,isOut:Bool = false)->UIImage?{
+    static func GetDeviceImage(type:GraphicDeviceType,isSelect:Bool = false,isOn:Bool = false,isOut:Bool = false)->UIImage?{
         let midName = isSelect ? "_select" : "_unselect"
         let lastName = isOn ? "_on" : "_off"
         
@@ -146,13 +171,68 @@ class GraphicEditorUtils {
         if isOut{
             name = "\(firstName)_out"
         }else{
-            if type == .Light{
+            if type == GraphicDeviceType.Light{
                 name = "\(firstName)\(midName)\(lastName)"
             }else{
                 name = "\(firstName)\(midName)"
             }
         }
         return UIImage.init(named: name)
+    }
+    
+    @objc static func ImgPress(image: UIImage?,dataLimit:Int) -> Data?{
+        guard let img = image else {
+            return nil
+        }
+        
+        let limit = 2000
+        let width = img.size.width
+        let height = img.size.height
+        let scale = width/height
+        var sizeChange = CGSize()
+        
+        var pressData = img.jpegData(compressionQuality: 0.7)
+        
+        if width <= CGFloat(limit),height<=CGFloat(limit) { //圖片寬度小於時圖片尺寸保持不變,不改變圖片大小
+            
+        }else{
+            if(scale >= 1){
+                let changedWidth:CGFloat = 2000
+                let changedheight:CGFloat = height / width * 2000
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+            }
+            else{
+                let changedWidth:CGFloat = width / height * 2000
+                let changedheight:CGFloat = 2000
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+            }
+            
+            
+            
+            UIGraphicsBeginImageContext(sizeChange)
+            img.draw(in: CGRect(x: 0, y: 0, width: sizeChange.width, height: sizeChange.height))
+            let resizedImg = UIGraphicsGetImageFromCurrentImageContext()
+              UIGraphicsEndImageContext()
+
+            pressData = resizedImg!.jpegData(compressionQuality: 1)
+        }
+        
+
+        if pressData!.count > dataLimit{
+            pressData = img.jpegData(compressionQuality: 0.5)
+        }
+        if pressData!.count > dataLimit{
+            pressData = img.jpegData(compressionQuality: 0.3)
+        }
+        if pressData!.count > dataLimit{
+            pressData = img.jpegData(compressionQuality: 0.2)
+        }
+
+        if pressData!.count > dataLimit{
+            return nil
+        }else{
+            return pressData!
+        }
     }
 }
 
@@ -161,143 +241,13 @@ extension UIImage {
     /**
      *  重设图片大小
      */
-    func reSizeImage(reSize:CGSize)->UIImage {
+    @objc func reSizeImage(reSize:CGSize)->UIImage {
         //UIGraphicsBeginImageContext(reSize);
         UIGraphicsBeginImageContextWithOptions(reSize,false,UIScreen.main.scale);
         self.draw(in: CGRect(x: 0, y: 0, width: reSize.width, height: reSize.height));
         let reSizeImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!;
         UIGraphicsEndImageContext();
         return reSizeImage;
-    }
-}
-
-extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int, alpha:CGFloat) {
-        assert(red >= 0 && red <= 255, "Invalid red component")
-        assert(green >= 0 && green <= 255, "Invalid green component")
-        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: alpha)
-    }
-    
-    convenience init(red: Int, green: Int, blue: Int) {
-        assert(red >= 0 && red <= 255, "Invalid red component")
-        assert(green >= 0 && green <= 255, "Invalid green component")
-        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
-    }
-    
-    
-    //int to rgb
-    convenience init(rgb: Int) {
-        self.init(
-            red: (rgb >> 16) & 0xFF,
-            green: (rgb >> 8) & 0xFF,
-            blue: rgb & 0xFF
-        )
-    }
-    
-    
-    convenience init(hex: String) {
-        let str = hex.replace2(target: "#",withString: "")
-        
-        let r = str.substring(from: 0,count: 2).strHex2Int()
-        let g = str.substring(from: 2,count: 2).strHex2Int()
-        let b = str.substring(from: 4,count: 2).strHex2Int()
-         //let str = hex.replace2(target: "#",withString: "0x")
-        self.init(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: 1.0)
-    }
-    
-    var hexString: String? {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-         
-        let multiplier = CGFloat(255.999999)
-         
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            return nil
-        }
-         
-        if alpha == 1.0 {
-            return String(
-                format: "#%02lX%02lX%02lX",
-                Int(red * multiplier),
-                Int(green * multiplier),
-                Int(blue * multiplier)
-            )
-        }
-        else {
-            return String(
-                format: "#%02lX%02lX%02lX%02lX",
-                Int(red * multiplier),
-                Int(green * multiplier),
-                Int(blue * multiplier),
-                Int(alpha * multiplier)
-            )
-        }
-    }
-    
-    var r: Int? {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-         
-        let multiplier = CGFloat(255.999999)
-         
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            return nil
-        }
-         
-        return Int(red * multiplier)
-    }
-    
-    var g: Int? {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-         
-        let multiplier = CGFloat(255.999999)
-         
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            return nil
-        }
-         
-        return Int(green * multiplier)
-    }
-    
-    var b: Int? {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-         
-        let multiplier = CGFloat(255.999999)
-         
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            return nil
-        }
-         
-        return Int(blue * multiplier)
-    }
-    
-    var rgb: Int? {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-         
-        let multiplier = CGFloat(255.999999)
-         
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            return nil
-        }
-         
-        return Int(red * multiplier) * 256 * 256 + Int(green * multiplier) * 256 + Int(blue * multiplier)
     }
 }
 
@@ -329,6 +279,12 @@ extension UIView{
             layer.borderColor = newValue?.cgColor
         }
     }
+    
+    @objc func customCorners(corners: CACornerMask, radius: CGFloat){
+        layer.cornerRadius = radius
+        layer.maskedCorners = corners
+    }
+    
     func customCorners(corners: CACornerMask, radius: CGFloat, bounds: Bool? = nil){
         if bounds != nil{
             clipsToBounds = bounds!
@@ -337,7 +293,7 @@ extension UIView{
         layer.maskedCorners = corners
     }
     
-    var x : CGFloat {
+    @objc var x : CGFloat {
         get {
             return frame.origin.x
         }
@@ -348,7 +304,7 @@ extension UIView{
         }
     }
     
-    var y : CGFloat {
+    @objc var y : CGFloat {
         get {
             return frame.origin.y
         }
@@ -359,7 +315,7 @@ extension UIView{
         }
     }
     
-    var width : CGFloat {
+    @objc var width : CGFloat {
         get {
             return frame.size.width
         }
@@ -370,7 +326,7 @@ extension UIView{
         }
     }
     
-    var height : CGFloat {
+    @objc var height : CGFloat {
         get {
             return frame.size.height
         }
@@ -381,7 +337,7 @@ extension UIView{
         }
     }
     
-    var centerX : CGFloat {
+    @objc var centerX : CGFloat {
         get {
             return center.x
         }
@@ -391,7 +347,7 @@ extension UIView{
             center = tempCenter
         }
     }
-    var centerY : CGFloat {
+    @objc var centerY : CGFloat {
         get {
             return center.y
         }
@@ -401,7 +357,7 @@ extension UIView{
             center = tempCenter
         }
     }
-    var size : CGSize {
+    @objc var size : CGSize {
         get {
             return frame.size
         }
@@ -761,10 +717,10 @@ extension String{
     
     func weekDay()->Int?{
         if Calendar.current.shortWeekdaySymbols.contains(self){
-            return Calendar.current.shortWeekdaySymbols.index(of: self)
+            return Calendar.current.shortWeekdaySymbols.firstIndex(of: self)
         }
         if Calendar.current.weekdaySymbols.contains(self){
-            return Calendar.current.weekdaySymbols.index(of: self)
+            return Calendar.current.weekdaySymbols.firstIndex(of: self)
         }
         return nil
     }
@@ -815,5 +771,298 @@ extension String{
             }
         }
         return result
+    }
+}
+
+extension UIViewController{
+    @objc var className:String{
+        return String.init(describing:  type(of: self))
+    }
+    
+    @objc static var className:String{
+        return String.init(describing: self)
+    }
+}
+
+extension UIView{
+    @objc var className:String{
+        return String.init(describing:  type(of: self))
+    }
+    
+    @objc static var className:String{
+        return String.init(describing: self)
+    }
+}
+
+extension NSMutableAttributedString{
+    func foreColor(color:UIColor)->NSMutableAttributedString{
+        self.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: self.allRange())
+        return self
+    }
+    func backColor(color:UIColor)->NSMutableAttributedString{
+        self.addAttribute(NSAttributedString.Key.backgroundColor, value: color, range: self.allRange())
+        return self
+    }
+    func font(font:UIFont)->NSMutableAttributedString{
+        self.addAttribute(NSAttributedString.Key.font, value: font, range: self.allRange())
+        return self
+    }
+    func underline()->NSMutableAttributedString{
+        self.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: self.allRange())
+        return self
+    }
+    func align(align:NSTextAlignment)->NSMutableAttributedString{
+        let para = NSMutableParagraphStyle.init()
+        para.alignment = align
+        self.addAttribute(NSAttributedString.Key.paragraphStyle, value: para, range: self.allRange())
+        return self
+    }
+    func spaceing(spacing:CGFloat)->NSMutableAttributedString{
+        let para = NSMutableParagraphStyle.init()
+        para.lineSpacing = spacing
+        self.addAttribute(NSAttributedString.Key.paragraphStyle, value: para, range: self.allRange())
+        return self
+    }
+    func paragraphStyle(para:NSMutableParagraphStyle)->NSMutableAttributedString{
+        self.addAttribute(NSAttributedString.Key.paragraphStyle, value: para, range: self.allRange())
+        return self
+    }
+    func baseLineOffset(offset:CGFloat)->NSMutableAttributedString{
+        self.addAttribute(NSAttributedString.Key.baselineOffset, value: offset, range: self.allRange())
+        return self
+    }
+    func allRange()->NSRange{
+        return NSMakeRange(0, self.length)
+    }
+}
+
+extension UIColor{
+    convenience init(red: Int, green: Int, blue: Int, alpha:CGFloat) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: alpha)
+    }
+}
+
+@objc extension UIColor{
+    convenience init(red: Int, green: Int, blue: Int) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    
+    //int to rgb
+    convenience init(rgb: Int) {
+        self.init(
+            red: (rgb >> 16) & 0xFF,
+            green: (rgb >> 8) & 0xFF,
+            blue: rgb & 0xFF
+        )
+    }
+    
+    
+    convenience init(hex: String) {
+        let str = hex.replace2(target: "#",withString: "")
+        
+        let r = str.substring(from: 0,count: 2).strHex2Int()
+        let g = str.substring(from: 2,count: 2).strHex2Int()
+        let b = str.substring(from: 4,count: 2).strHex2Int()
+         //let str = hex.replace2(target: "#",withString: "0x")
+        self.init(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: 1.0)
+    }
+    
+    var hexString: String? {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+         
+        let multiplier = CGFloat(255.999999)
+         
+        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return nil
+        }
+         
+        if alpha == 1.0 {
+            return String(
+                format: "#%02lX%02lX%02lX",
+                Int(red * multiplier),
+                Int(green * multiplier),
+                Int(blue * multiplier)
+            )
+        }
+        else {
+            return String(
+                format: "#%02lX%02lX%02lX%02lX",
+                Int(red * multiplier),
+                Int(green * multiplier),
+                Int(blue * multiplier),
+                Int(alpha * multiplier)
+            )
+        }
+    }
+    
+    var r: Int {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+         
+        let multiplier = CGFloat(255.999999)
+         
+        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return 0
+        }
+         
+        return Int(red * multiplier)
+    }
+    
+    var g: Int {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+         
+        let multiplier = CGFloat(255.999999)
+         
+        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return 0
+        }
+         
+        return Int(green * multiplier)
+    }
+    
+    var b: Int {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+         
+        let multiplier = CGFloat(255.999999)
+         
+        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return 0
+        }
+         
+        return Int(blue * multiplier)
+    }
+    
+    var rgb: Int {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+         
+        let multiplier = CGFloat(255.999999)
+         
+        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return 0
+        }
+         
+        return Int(red * multiplier) * 256 * 256 + Int(green * multiplier) * 256 + Int(blue * multiplier)
+    }
+}
+
+extension GraphicMap{
+    func exportData()->JSON{
+        let zones = self.deviceList
+        var tempData = JSON.init([])
+        for zone in zones{
+            var zData = zone.gFrame.json
+            if let z = zone as? GraphicBaseZone{
+                zData["major_type"].intValue = z.MajorType.rawValue
+                zData["minor_type"].intValue = z.MinorType.rawValue
+                zData["name"].stringValue = z.Name
+                zData["devices"] = z.exportData()
+            }else if let d = zone as? GraphicBaseDevice{
+                zData["major_type"].intValue = d.MajorType.rawValue
+                zData["minor_type"].intValue = d.MinorType.rawValue
+                zData["name"].stringValue = d.Name
+            }
+            tempData.arrayObject?.append(zData)
+        }
+        return tempData
+    }
+    
+    
+    func importData(json:JSON?){
+        Clean()
+        if let arr = json?.array{
+            for zoneData in arr{
+                createObj(data: zoneData)
+            }
+        }
+    }
+    
+    func createObj(data:JSON){
+        if data["major_type"].exists(),data["minor_type"].exists(){
+            let major_type = data["major_type"].intValue
+            let minor_type = data["minor_type"].intValue
+            switch GraphicEditorUtils.MajorType.init(rawValue: major_type) {
+            case .Zone:
+                let zone = AddZone(type: .init(rawValue: minor_type) ?? .Unknow, gframe: .init(json: data))
+                zone.Name = data["name"].exists() ? data["name"].stringValue : ""
+                if data["devices"].exists(),let deviceArr = data["devices"].array{
+                    for deviceData in deviceArr{
+                        zone.createObj(data: deviceData)
+                    }
+                }
+            case .Device:
+                let device = AddDevice(type: .init(rawValue: minor_type) ?? .Unknow, gframe: .init(json: data))
+                device.Name = data["name"].exists() ? data["name"].stringValue : ""
+            default:
+                break
+            }
+        }
+    }
+}
+
+
+extension GraphicBaseZone{
+    func createObj(data:JSON){
+        if data["major_type"].exists(),data["minor_type"].exists(){
+            let major_type = data["major_type"].intValue
+            let minor_type = data["minor_type"].intValue
+            switch GraphicEditorUtils.MajorType.init(rawValue: major_type) {
+            case .Zone:
+                let zone = AddZone(type: .init(rawValue: minor_type) ?? .Unknow, gframe: .init(json: data))
+                zone.Name = data["name"].exists() ? data["name"].stringValue : ""
+                if data["devices"].exists(),let deviceArr = data["devices"].array{
+                    for deviceData in deviceArr{
+                        zone.createObj(data: deviceData)
+                    }
+                }
+            case .Device:
+                let device = AddDevice(type: .init(rawValue: minor_type) ?? .Unknow, gframe: .init(json: data))
+                device.Name = data["name"].exists() ? data["name"].stringValue : ""
+            default:
+                break
+            }
+        }
+    }
+    
+    func exportData()->JSON{
+        var tempData = JSON.init([])
+        for zone in self.deviceList{
+            var zData = zone.gFrame.json
+            if let z = zone as? GraphicBaseZone{
+                zData["major_type"].intValue = z.MajorType.rawValue
+                zData["minor_type"].intValue = z.MinorType.rawValue
+                zData["name"].stringValue = z.Name
+                zData["devices"] = z.exportData()
+                
+            }else if let d = zone as? GraphicBaseDevice{
+                zData["major_type"].intValue = d.MajorType.rawValue
+                zData["minor_type"].intValue = d.MinorType.rawValue
+                zData["name"].stringValue = d.Name
+            }
+            tempData.arrayObject?.append(zData)
+        }
+        return tempData
     }
 }

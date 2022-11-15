@@ -13,6 +13,7 @@ import SwiftyJSON
 @objc protocol GraphicBaseAbstractDelegate {
     @objc func OnItemClick(item:GraphicBaseAbstract)
     @objc func OnItemDrag(item:GraphicBaseAbstract,recognizer:UIPanGestureRecognizer)
+    @objc func OnItemScale(item:GraphicBaseAbstract,recognizer:UIPanGestureRecognizer)
     @objc func OnEditorClick(item:GraphicBaseAbstract)
     @objc func OnEditorPowerClick(item:GraphicBaseAbstract,isOn:Bool)
 }
@@ -20,31 +21,39 @@ import SwiftyJSON
 class GraphicBaseAbstract:UIView {
     
     //物件ID
-    var data:JSON!
+    @objc public var data:Any!
     //位置資訊
-    var gFrame:GraphicEditorUtils.GraphicFrame = GraphicEditorUtils.GraphicFrame.init()
+    @objc public var gFrame:GraphicEditorUtils.GraphicFrame = GraphicEditorUtils.GraphicFrame.init()
     //委託事件
-    var del:GraphicBaseAbstractDelegate!
+    @objc public var del:GraphicBaseAbstractDelegate!
     //判斷點擊事件
     var isClick = false
+    //是否連線
+    @objc public var isOn:Bool = true
     //是否focus
-    var isSelect = false
+    @objc public var isSelect = false
+    //可否控制
+    @objc public var canControl = false
     //當前縮放
-    var scale:CGFloat =  1
+    @objc public var scale:CGFloat =  1
     //包含額外物件(編輯bar)之寬
-    var gWidth:CGFloat{
+    @objc public var gWidth:CGFloat{
         return self.width
     }
     //包含額外物件(編輯bar)之高
-    var gHeight:CGFloat{
+    @objc public var gHeight:CGFloat{
         return self.height
     }
-    var Name:String{
+    @objc public var Name:String{
         get{
             return ""
         }
         set{
         }
+    }
+    //類型
+    public var MajorType:GraphicEditorUtils.MajorType{
+        return .Unknow
     }
     
     override init(frame: CGRect) {
@@ -59,16 +68,24 @@ class GraphicBaseAbstract:UIView {
         
     }
     
-    func SetFocus(isSelect:Bool){
+    @objc public func SetFocus(isSelect:Bool){
         self.isSelect = isSelect
     }
     
-    func Scale(scale:CGFloat){
+    @objc public func Scale(scale:CGFloat){
         self.scale = scale
     }
     
-    func Resize(toSize:CGSize){
+    @objc public func Resize(toSize:CGSize){
         
+    }
+    
+    @objc public func SetPower(isOn: Bool) {
+        self.isOn = isOn
+    }
+    
+    @objc public func SetControl(canControl: Bool) {
+        self.canControl = canControl
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -105,7 +122,9 @@ class GraphicBaseAbstract:UIView {
             let x = self.frame.minX - map.width/2 / map.transform.a
             let y = self.frame.minY - map.height/2 / map.transform.d
             return GraphicEditorUtils.GraphicFrame.init(x: x == 0 ? 0 : x / GraphicEditorUtils.BASE_SIZE.width , y: y == 0 ? 0 : y / GraphicEditorUtils.BASE_SIZE.height, width: width / GraphicEditorUtils.BASE_SIZE.width, height: height / GraphicEditorUtils.BASE_SIZE.height)
+        }else{
+            print("error: can't find superview")
+            return .init()
         }
-        return .init()
     }
 }

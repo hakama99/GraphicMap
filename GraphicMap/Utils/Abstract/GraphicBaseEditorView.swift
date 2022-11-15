@@ -61,6 +61,9 @@ class GraphicBaseEditorView: UIView {
         nameBtn.setTitle("", for: .normal)
         nameBtn.titleLabel?.font = UIFont.init(name: GraphicEditorUtils.FONT_NAME, size: editLabelSize)
         nameBtn.addTarget(self, action: #selector(onEditorClick), for: .touchUpInside)
+        nameBtn.titleLabel?.minimumScaleFactor = 0.7
+        //nameBtn.titleLabel?.numberOfLines = 0
+        nameBtn.titleLabel?.adjustsFontSizeToFitWidth = true
         self.addSubview(nameBtn)
         
         powerBtn = UIButton.init(frame: CGRect.init(x: frame.width - 30, y: 0, width: 20, height: frame.height))
@@ -83,8 +86,8 @@ class GraphicBaseEditorView: UIView {
 
         self.backgroundColor = isSelect ? SELECT_BG_COLOR : DEFAULT_BG_COLOR
         fgView?.backgroundColor = isSelect ? SELECT_FG_COLOR : DEFAULT_FG_COLOR
-        nameBtn.isUserInteractionEnabled = isSelect
-        powerBtn.isUserInteractionEnabled = isSelect
+        //nameBtn.isUserInteractionEnabled = isSelect
+        //powerBtn.isUserInteractionEnabled = isSelect
     }
     
     func Scale(scale:CGFloat){

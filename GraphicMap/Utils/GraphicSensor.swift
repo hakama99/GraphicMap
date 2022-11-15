@@ -12,8 +12,15 @@ import UIKit
 
 class GraphicSensor: GraphicBaseDevice {
 
-    override var MinorType: GraphicEditorUtils.DeviceType{
+    override var MinorType: GraphicEditorUtils.GraphicDeviceType{
         return .Sensor
+    }
+    
+    
+    override func initialize() {
+        super.initialize()
+        editView?.powerBtn?.removeFromSuperview()
+        editView?.powerBtn = nil
     }
 }
 

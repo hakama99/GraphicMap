@@ -34,28 +34,16 @@ class GraphicSquareZone: GraphicBaseZone {
     
     override func initialize() {
         super.initialize()
-        zone.viewBorderWidth = 2
-        zone.viewBorderColor = DEFAULT_BORDER_COLOR
-        zone.viewCornerRadius = GraphicEditorUtils.DEFAULT_RADIUS
-        
-        instruction.frame = CGRect.init(x: frame.width, y: -instructionSize.height, width: instructionSize.width, height: instructionSize.height)
+        zoneView.viewBorderWidth = 2
+        zoneView.viewBorderColor = DEFAULT_BORDER_COLOR
+        zoneView.viewCornerRadius = GraphicEditorUtils.DEFAULT_RADIUS
     }
 
 
     override func SetFocus(isSelect:Bool){
         super.SetFocus(isSelect: isSelect)
         
-        zone.viewBorderColor = isSelect ? SELECT_BORDER_COLOR : DEFAULT_BORDER_COLOR
-    }
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let instructionpoint = self.convert(point, to: instruction)
-        if instruction.bounds.contains(instructionpoint) {
-            return instruction.hitTest(instructionpoint, with: event)
-        }
-        let tmp = super.hitTest(point, with: event)
-        //print("GraphicBaseZone\(tmp)")
-        return tmp
+        zoneView.viewBorderColor = isSelect ? SELECT_BORDER_COLOR : DEFAULT_BORDER_COLOR
     }
     
     override func Scale(scale: CGFloat) {
@@ -64,8 +52,6 @@ class GraphicSquareZone: GraphicBaseZone {
     
     override func Resize(toSize: CGSize) {
         super.Resize(toSize: toSize)
-        
-        instruction.frame = CGRect.init(x: frame.width, y: -instructionSize.height, width: instructionSize.width, height: instructionSize.height)
     }
 }
 

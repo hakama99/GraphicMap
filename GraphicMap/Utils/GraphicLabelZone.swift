@@ -14,7 +14,7 @@ class GraphicLabelZone: GraphicBaseZone {
 
     override var MINI_SIZE: CGSize{
         get {
-            return CGSize.init(width: 100, height: 50)
+            return GraphicEditorUtils.MINI_SIZE
         }
         set {
         }
@@ -40,53 +40,40 @@ class GraphicLabelZone: GraphicBaseZone {
     }
     override var Name: String{
         get{
-            return textfield?.text! ?? ""
+            return label?.text ?? ""
         }
         set{
-            textfield?.text = newValue
+            label?.text = newValue
         }
     }
     
-    var textfield:UITextField!
+    var label:UILabel!
+    var labelOffset:CGFloat = 10
     
     override func initialize() {
         super.initialize()
-        zone.viewBorderWidth = 2
-        zone.viewBorderColor = DEFAULT_BORDER_COLOR
-        zone.viewCornerRadius = GraphicEditorUtils.DEFAULT_RADIUS
+        zoneView.viewBorderWidth = 2
+        zoneView.viewBorderColor = DEFAULT_BORDER_COLOR
+        zoneView.viewCornerRadius = GraphicEditorUtils.DEFAULT_RADIUS
         
-        instruction.frame = CGRect.init(x: frame.width, y: -instructionSize.height, width: instructionSize.width, height: instructionSize.height)
-        
-        textfield = UITextField.init(frame: CGRect.init(origin: .zero, size: size))
-        textfield.font = UIFont.init(name: GraphicEditorUtils.FONT_NAME, size: 15)
-        textfield.textColor = UIColor.init(red: 255, green: 255, blue: 255, alpha: 1)
-        textfield.paddingLeftCustom = 10
-        textfield.paddingRightCustom = 10
-        textfield.textAlignment = .left
-        textfield.isUserInteractionEnabled = false
-        
-        textfield.addTarget(self, action: #selector(dismissKeyBoard), for: .editingDidEndOnExit)
-        self.addSubview(textfield)
+        label = UILabel.init(frame: CGRect.init(x: labelOffset, y: 0, width: width-labelOffset*2, height: height))
+        label.text = ""
+        label.font = UIFont.init(name: GraphicEditorUtils.FONT_NAME, size: 15)
+        label.textColor = UIColor.init(red: 255, green: 255, blue: 255, alpha: 1)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        self.addSubview(label)
     }
 
 
     override func SetFocus(isSelect:Bool){
         super.SetFocus(isSelect: isSelect)
         
-        zone.viewBorderColor = isSelect ? SELECT_BORDER_COLOR : DEFAULT_BORDER_COLOR
+        zoneView.viewBorderColor = isSelect ? SELECT_BORDER_COLOR : DEFAULT_BORDER_COLOR
         
         //textfield.isUserInteractionEnabled = isSelect
     }
     
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let instructionpoint = self.convert(point, to: instruction)
-        if instruction.bounds.contains(instructionpoint) {
-            return instruction.hitTest(instructionpoint, with: event)
-        }
-        let tmp = super.hitTest(point, with: event)
-        //print("GraphicBaseZone\(tmp)")
-        return tmp
-    }
     
     override func Scale(scale: CGFloat) {
         super.Scale(scale: scale)
@@ -96,9 +83,7 @@ class GraphicLabelZone: GraphicBaseZone {
         super.Resize(toSize: toSize)
         
         let resize = CGSize.init(width: max(toSize.width, MINI_SIZE.width), height: max(toSize.height, MINI_SIZE.height))
-        textfield.frame = CGRect.init(origin: .zero, size: resize)
-        
-        instruction.frame = CGRect.init(x: frame.width, y: -instructionSize.height, width: instructionSize.width, height: instructionSize.height)
+        label.frame = CGRect.init(x: 5, y: 0, width: resize.width-10, height: resize.height)
     }
     
     @objc func dismissKeyBoard() {

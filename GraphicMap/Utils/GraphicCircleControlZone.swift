@@ -44,10 +44,11 @@ class GraphicCircleControlZone: GraphicBaseZone {
     
     override func initialize() {
         super.initialize()
-        zone.viewCornerRadius = width / 2
+        zoneView.viewCornerRadius = width / 2
         
         editView = GraphicZoneEditorView.init(frame: CGRect.init(x: 0, y: frame.height, width: frame.width, height: GraphicEditorUtils.ZONE_EDITOR_SIZE.height))
         editView.SetFocus(isSelect: false)
+        editView.powerBtn?.isHidden = !canControl
         editView.del = self
         self.addSubview(editView)
     }
@@ -59,11 +60,11 @@ class GraphicCircleControlZone: GraphicBaseZone {
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let tmp = super.hitTest(point, with: event)
         let editorpoint = self.convert(point, to: editView)
         if editView.bounds.contains(editorpoint) {
             return editView.hitTest(editorpoint, with: event)
         }
-        let tmp = super.hitTest(point, with: event)
         //print("GraphicBaseZone\(tmp)")
         return tmp
     }
@@ -79,6 +80,7 @@ class GraphicCircleControlZone: GraphicBaseZone {
     }
     
     override func Resize(toSize: CGSize) {
+        super.Resize(toSize: toSize)
         //print("toSize\(toSize)")
         let size1 = max(toSize.width, toSize.height)
         //print("size1\(size1)")
@@ -90,10 +92,8 @@ class GraphicCircleControlZone: GraphicBaseZone {
         self.frame = CGRect.init(x: x - (resize.width - size.width)/2 , y: y - (resize.height - size.height)/2, width: resize.width, height: resize.height)
         gFrame = getGFrame()
         
-        zone?.frame = CGRect.init(origin: .zero, size: resize)
-        zone?.viewCornerRadius = circleSize / 2
-        
-        instruction?.frame = CGRect.init(x: frame.width-instructionSize.width, y: 0, width: instructionSize.width, height: instructionSize.height)
+        zoneView?.frame = CGRect.init(origin: .zero, size: resize)
+        zoneView?.viewCornerRadius = circleSize / 2
         
         editView?.Scale(scale: scale)
         let oriSize = editView?.size ?? .zero
@@ -104,25 +104,35 @@ class GraphicCircleControlZone: GraphicBaseZone {
         reloadPositionInZone()
     }
     
-    override func AddDevice(type: GraphicEditorUtils.DeviceType, gframe: GraphicEditorUtils.GraphicFrame) -> GraphicBaseDevice {
+    override func SetPower(isOn: Bool) {
+        super.SetPower(isOn: isOn)
+        editView?.SetPower(isOn: self.isOn)
+        
+        for item in deviceList{
+            item.SetPower(isOn: self.isOn)
+        }
+    }
+    
+    override func SetControl(canControl: Bool) {
+        super.SetControl(canControl: canControl)
+        editView?.powerBtn?.isHidden = !canControl
+    }
+    
+    override func AddDevice(type: GraphicEditorUtils.GraphicDeviceType, gframe: GraphicEditorUtils.GraphicFrame) -> GraphicBaseDevice {
         let device = super.AddDevice(type: type, gframe: gframe)
         
         
         //調整大小
         let grect = getDeviceRect()
         //圓周內正方形
-        var realSize = CGSize.init(width: grect.width / SHOW_PERCENT, height: grect.height / SHOW_PERCENT)
-        if realSize.width < gFrame.width{
-            realSize.width = gFrame.width
-        }
-        if realSize.height < gFrame.height{
-            realSize.height = gFrame.height
-        }
+        let realSize = CGSize.init(width: grect.width / SHOW_PERCENT, height: grect.height / SHOW_PERCENT)
+        grect.width =  max(realSize.width,gFrame.width)
+        grect.height =  max(realSize.height, gFrame.height)
         Resize(toSize: realSize)
         return device
     }
     
-    override func AddDevice(types: [GraphicEditorUtils.DeviceType], gframe: GraphicEditorUtils.GraphicFrame) -> [GraphicBaseDevice] {
+    override func AddDevice(types: [GraphicEditorUtils.GraphicDeviceType], gframe: GraphicEditorUtils.GraphicFrame) -> [GraphicBaseDevice] {
         let devices = super.AddDevice(types: types, gframe: gframe)
         
         //調整大小
@@ -140,7 +150,7 @@ class GraphicCircleControlZone: GraphicBaseZone {
     }
     
     override func reloadPositionInZone() {
-        var deviceRect = getDeviceRect()
+        let deviceRect = getDeviceRect()
         let zoneRect = gFrame
         let showSize = CGSize.init(width: gFrame.width * SHOW_PERCENT, height: gFrame.height * SHOW_PERCENT)
         //顯示範圍大於最小範圍

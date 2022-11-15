@@ -17,7 +17,7 @@ class GraphicZoneEditorView: GraphicBaseEditorView {
         
         fgView.frame = CGRect.init(x: 0, y: 0, width: frame.width, height: frame.height)
         nameBtn.frame = CGRect.init(x: 0, y: 0, width: frame.width - 30, height: frame.height)
-        powerBtn.frame = CGRect.init(x: frame.width - 30, y: 0, width: 20, height: frame.height)
+        powerBtn?.frame = CGRect.init(x: frame.width - 30, y: 0, width: 20, height: frame.height)
         
         
         self.customCorners(corners: [.layerMinXMaxYCorner,.layerMaxXMaxYCorner], radius: GraphicEditorUtils.DEFAULT_RADIUS)
@@ -27,7 +27,7 @@ class GraphicZoneEditorView: GraphicBaseEditorView {
         nameBtn.contentHorizontalAlignment = .left
         nameBtn.semanticContentAttribute = .forceRightToLeft
         nameBtn.contentEdgeInsets = .init(top: 0, left: 10, bottom: 0, right: 10)
-        nameBtn.imageEdgeInsets = .init(top: 0, left: 10, bottom: 0, right: 0)
+        //nameBtn.imageEdgeInsets = .init(top: 0, left: 5, bottom: 0, right: 5)
     }
     
     override func SetFocus(isSelect:Bool){

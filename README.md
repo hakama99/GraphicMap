@@ -21,18 +21,25 @@
 ### createdesample
 
 產生各種基本物件，目前有
-* Zone
-  * 圓形+編輯器
-  * 方形+編輯器
-  * 圓型
-  * 方型
-  * label標籤
+* 區域物件
+  * 圓形+編輯器 GraphicCircleControlZone
+  * 方形+編輯器 GraphicSquareControlZone
+  * 圓型 GraphicCircleZone
+  * 方型 GraphicSquareZone
+  * label標籤 GraphicLabelZone
 
-* Device(目前僅圖片不同，可自定義)
-  * Light
-  * Sensor
-  * Gateway
-  * Beacon
+* 裝置(目前僅圖片不同，可自定義)
+  * GraphicLight
+  * GraphicSensor
+  * GraphicGateway
+  * GraphicBeacon
+  * GraphicDeviceSet
+  * GraphicStrip
+  * GraphicTriac
+  
+* 編輯視窗
+  * 裝置視窗 GraphicDeviceEditorView
+  * 區域視窗 GraphicZoneEditorView
 
 
 ### createdeviceinzone
@@ -64,6 +71,8 @@
     @objc func OnItemClick(item:GraphicBaseAbstract)
     //物件拖拉回傳
     @objc func OnItemDrag(item:GraphicBaseAbstract,recognizer:UIPanGestureRecognizer)
+    //物件縮放回傳
+    @objc func OnItemScale(item:GraphicBaseAbstract,recognizer:UIPanGestureRecognizer)
     //控制器按下回傳
     @objc func OnEditorClick(item:GraphicBaseAbstract)
     //控制器開關回傳
